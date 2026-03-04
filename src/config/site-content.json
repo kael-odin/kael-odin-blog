@@ -44,7 +44,7 @@
 		{
 			"id": "github",
 			"type": "github",
-			"value": "https://github.com/odin-thordata",
+			"value": "https://github.com/kael-odin",
 			"label": "Github",
 			"order": 1
 		},
