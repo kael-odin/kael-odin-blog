@@ -1,26 +1,26 @@
 {
 	"meta": {
 		"title": "Kael Odin's Blog",
-		"description": "Kael 的个人博客，随笔记录。",
+		"description": "Kael 的个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
 		"username": "Kael Odin"
 	},
 	"theme": {
-		"colorBrand": "#de4331",
-		"colorPrimary": "#4E3F42",
+		"colorBrand": "#35bfab",
+		"colorPrimary": "#334f52",
 		"colorSecondary": "#7b888e",
-		"colorBrandSecondary": "#FCC841",
+		"colorBrandSecondary": "#1fc9e7",
 		"colorBg": "#eeeeee",
 		"colorBorder": "#ffffff",
 		"colorCard": "#ffffff66",
 		"colorArticle": "#ffffffcc"
 	},
 	"backgroundColors": [
-		"#FCC841",
-		"#DFEFFC",
-		"#DEDE92",
-		"#DE4331",
-		"#FE9750",
-		"#FCC841"
+		"#EDDD62",
+		"#9EE7D1",
+		"#84D68A",
+		"#EDDD62",
+		"#88E6E5",
+		"#a7f3d0"
 	],
 	"artImages": [
 		{
@@ -32,7 +32,7 @@
 			"url": "/images/art/a46372ff45bc5524.jpg"
 		}
 	],
-	"currentArtImageId": "a46372ff45bc5524",
+	"currentArtImageId": "cat",
 	"backgroundImages": [
 		{
 			"id": "",
@@ -44,15 +44,8 @@
 		{
 			"id": "github",
 			"type": "github",
-			"value": "https://github.com/odin-thordata",
+			"value": "https://github.com/yysuni",
 			"label": "Github",
-			"order": 3
-		},
-		{
-			"id": "email",
-			"type": "email",
-			"value": "yysuni1001@gmail.com",
-			"label": "",
 			"order": 1
 		},
 		{
@@ -61,6 +54,13 @@
 			"value": "445481611",
 			"label": "",
 			"order": 2
+		},
+		{
+			"id": "email",
+			"type": "email",
+			"value": "yysuni1001@gmail.com",
+			"label": "",
+			"order": 3
 		}
 	],
 	"clockShowSeconds": false,
