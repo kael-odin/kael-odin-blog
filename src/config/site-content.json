@@ -1,7 +1,7 @@
 {
 	"meta": {
 		"title": "Kael Odin's Blog",
-		"description": "Kael 的个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
+		"description": "Kael 的个人博客，随笔记录。",
 		"username": "Kael Odin"
 	},
 	"theme": {
@@ -44,16 +44,9 @@
 		{
 			"id": "github",
 			"type": "github",
-			"value": "https://github.com/yysuni",
+			"value": "https://github.com/odin-thordata",
 			"label": "Github",
 			"order": 3
-		},
-		{
-			"id": "juejin",
-			"type": "juejin",
-			"value": "https://juejin.cn/user/2427311675422382",
-			"label": "稀土掘金",
-			"order": 2
 		},
 		{
 			"id": "email",
@@ -67,7 +60,7 @@
 			"type": "qq",
 			"value": "445481611",
 			"label": "",
-			"order": 4
+			"order": 2
 		}
 	],
 	"clockShowSeconds": false,
