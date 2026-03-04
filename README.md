@@ -1,164 +1,205 @@
-# 2025 Blog
+## Kael Blog 2026
 
-> 最新引导说明：https://www.yysuni.com/blog/readme
+**ZH | 简介**
 
-该项目使用 Github App 管理项目内容，请保管好后续创建的 **Private key**，不要上传到公开网上。
+Kael 的个人博客与数字花园，基于 Next.js 2025 app router 搭建，支持通过 GitHub App 在网页前端可视化编辑内容（文章、站点配置、图片等），所有内容最终都落在我的 GitHub 仓库中，便于长期维护和备份。
 
-## 1. 安装
+**EN | Overview**
 
-使用该项目可以先不做本地开发，直接部署然后配置环境变量。具体变量名请看下列大写变量
+Kael's personal blog & digital garden, built with Next.js app router.  
+Content (posts, site config, images, etc.) is managed visually in the browser via a GitHub App and persisted back to this GitHub repository.
 
-```ts
-export const GITHUB_CONFIG = {
-	OWNER: process.env.NEXT_PUBLIC_GITHUB_OWNER || 'yysuni',
-	REPO: process.env.NEXT_PUBLIC_GITHUB_REPO || '2025-blog-public',
-	BRANCH: process.env.NEXT_PUBLIC_GITHUB_BRANCH || 'main',
-	APP_ID: process.env.NEXT_PUBLIC_GITHUB_APP_ID || '-'
-} as const
+> Template inspired by [`YYsuni/2025-blog-public`](https://github.com/YYsuni/2025-blog-public) and adapted for my own use.
+
+---
+
+## 特性 Features
+
+- **前端可视化内容管理 Visual content editing**
+  - 在浏览器中写 Markdown 文章、上传封面和插图
+  - 通过 GitHub App 自动提交到仓库（无需单独登录后台）
+- **完全由 Git 仓库驱动 Git-based content**
+  - 文章保存在 `public/blogs/*`，支持版本管理和回滚
+  - 站点配置与布局保存在 `src/config/*`
+- **现代前端技术栈 Modern stack**
+  - Next.js 16、React 19、TypeScript、Tailwind CSS 4
+  - 动效和交互细节友好，适配桌面与移动端
+- **多入口内容模块 Multiple sections**
+  - 博客文章、项目展示、图片墙、分享区、代码片段等
+
+---
+
+## 在线地址 Online Demo
+
+- **Production**: `https://kael-odin-blog.vercel.app/`
+
+---
+
+## 技术栈 Tech Stack
+
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Language**: TypeScript
+- **UI & Styles**: React 19, Tailwind CSS 4, custom CSS
+- **Content**: Markdown + JSON (blog index, categories, site config)
+- **Auth & GitHub Integration**:
+  - GitHub App + Private Key (PEM)
+  - GitHub REST API for commits / blobs / trees
+- **Deployment**: Vercel / Cloudflare (via `@opennextjs/cloudflare`)
+
+---
+
+## 本地开发 Local Development
+
+**前置要求 Prerequisites**
+
+- Node.js（建议 LTS 版本）
+- 包管理工具：推荐 `pnpm`
+
+```bash
+pnpm install
+pnpm dev
 ```
 
-也可以自己手动先调整安装，可自行 `pnpm i`
+默认开发端口为 `http://localhost:2025`。
 
-## 2. 部署
+**构建与启动 Build & Start**
 
-我这里熟悉 Vercel 部署，就以 Vercel 部署为例子。创建 Project => Import 这个项目
-
-![](https://www.yysuni.com/blogs/readme/730266f17fab9717.png)
-
-无需配置，直接点部署
-
-![](https://www.yysuni.com/blogs/readme/95dee9a69154d0d0.png)
-
-大约 60 秒会部署完成，有一个直接 vercel 域名，如：https://2025-blog-public.vercel.app/
-
-到这里部署网站已经完成了，下一步创建 Github App
-
-## 3. 创建 Github App 链接仓库
-
-在 github 个人设置里面，找到最下面的 Developer Settings ，点击进入
-
-![](https://www.yysuni.com/blogs/readme/0abb3b592cbedad6.png)
-
-进入开发者页面，点击 **New Github App**
-
-*GitHub App name* 和 *Homepage URL* , 输入什么都不影响。Webhook 也关闭，不需要。
-
-![](https://www.yysuni.com/blogs/readme/71dcd9cf8ec967c0.png)
-
-只需要注意设置一个仓库 write 权限，其它不用。
-
-![](https://www.yysuni.com/blogs/readme/2be290016e56cd34.png)
-
-点击创建，谁能安装这个仓库这个选择无所谓。直接创建。
-
-![](https://www.yysuni.com/blogs/readme/aa002e6805ab2d65.png)
-
-
-### 创建密钥
-
-创建好 Github App 后会提示必须创建一个 **Private Key**，直接创建，会自动下载（不见了也不要紧，后面自己再创建再下载就行）。页面上有个 **App ID** 需要复制一下
-
-再切换到安装页面
-
-![](https://www.yysuni.com/blogs/readme/c122b1585bb7a46a.png)
-
-这里一定要只**授权当前项目**。
-
-![](https://www.yysuni.com/blogs/readme/2cf1cee3b04326f1.png)
-
-点击安装，就完成了 Github App 管理该仓库的权限设置了。下一步就是让前端知道推送那个项目，就是最开始提到的环境变量。（如果你不会设置环境变量，直接改仓库文件 `src/consts.ts` 也行。因为是公开的，所以环境变量意义也不大）
-
-直接输入这几个环境变量值就行，一般只用设置 OWNER 和 APP_ID。其它配置不用管，直接输入创建就行。
-
-![](https://www.yysuni.com/blogs/readme/c5a049d737848abf.png)
-
-设置完成后，需要手动再部署一次，让环境变量生效。
-* 可以直接 push 一次仓库代码会触发部署
-* 也可以手动选择创建一次部署
-![](https://www.yysuni.com/blogs/readme/59a802ed8d1c3a13.png)
-
-## 4. 完成
-
-现在，部署的这个网站就可以开始使用前端改内容了。比如更改一个分享内容。
-
-**提示**，网站前端页面删改完提示成功之后，你需要等待后台的部署完成，再刷新页面才能完成服务器内容的更新哦。
-
-## 5. 删除
-
-使用这个项目应该第一件事需要删除我的 blog，单独删除，批量删除已完成。
-
-## 6. 配置
-
-大部分页面右上角都会有一个编辑按钮，意味着你可以使用 **private key** 进行配置部署。
-
-### 6.1 网站配置
-
-首页有一个不显眼的配置按钮，点击就能看到现在可以配置的内容。
-
-![](https://www.yysuni.com/blogs/readme/cddb4710e08a5069.png)
-
-## 7. 写 blog
-
-写 blog 的图片管理，可能会有疑惑。图片管理推荐逻辑是先点击 **+ 号** 添加图片，（推荐先压缩好，尺寸推荐宽度不超过 1200）。然后将上传好的图片直接拖入文案编辑区，这就已经添加好了，点击右上角预览就可以看到效果。
-
-## 8. 写给非前端
-
-非前端配置内容，还是需要一个文件指引。下面写一些更细致的代码配置。
-
-### 8.1 移除 Liquid Grass
-
-进入 `src/layout/index.tsx` 文件，删除两行代码，然后提交代码到你的 github
-```tsx
-const LiquidGrass = dynamic(() => import('@/components/liquid-grass'), { ssr: false })
-// 中间省略...
-<LiquidGrass /> // 第 53 行
+```bash
+pnpm build
+pnpm start
 ```
 
-![](https://www.yysuni.com/blogs/readme/f70ff3fe3a77f193.png)
+---
 
-### 8.2 配置首页内容
+## 内容结构与可视化编辑 Content Structure & Visual Editing
 
-首页的内容现在只能前端配置一部分，所以代码更改在 `src/app/(home)` 目录，这个目录代表首页所有文件。首页的具体文件为  `src/app/(home)/page.tsx`
+### 文章与索引 Blogs & Index
 
- ![](https://www.yysuni.com/blogs/readme/011679cd9bf73602.png)
+- 单篇文章目录结构 Single post structure
+  - `public/blogs/{slug}/index.md`：正文内容（Markdown）
+  - `public/blogs/{slug}/config.json`：文章元信息（标题、标签、封面、摘要等）
+- 文章列表与分类 Index & Categories
+  - `public/blogs/index.json`：全部文章的索引
+  - `public/blogs/categories.json`：分类配置
 
-这里可以看到有很多 `Card` 文件，需要改那个首页 Card 内容就可以点入那个具体文件修改。
+你可以：
 
-比如中间的内容，为 `HiCard`，点击 `hi-card.tsx` 文件，即可更改其内容。
+- **直接修改文件**（适合批量重构或迁移）
+- 或者在前端进入 `/blog`、`/write` 页面，通过 UI 编辑并点击保存/发布，由前端自动写回 GitHub 仓库。
 
-![](https://www.yysuni.com/blogs/readme/20b0791d012163ee.png)
+### 站点配置 Site Configuration
 
-## 9. 互助群
+- 全局站点信息、主题色和社交链接在：
+  - `src/config/site-content.json`
+- 首页卡片布局配置在：
+  - `src/config/card-styles.json`
+- 首页逻辑入口在：
+  - `src/app/(home)/page.tsx`
 
-对于完全不是**程序员**的用户，确实会对于更新代码后，如何同步，如何**合并代码**手足无措。我创建了一个 **QQ群**（加群会简单点），或者 vx 群还是 tg 群会好一点可以 issue 里面说下就行。
+这些配置既可以手改文件，也可以在首页的配置入口里可视化调整后保存（通过 GitHub App 推送回仓库）。
 
-QQ 群：[https://qm.qq.com/q/spdpenr4k2](https://qm.qq.com/q/spdpenr4k2)
-> 不好意思，之前的那个qq群ID（1021438316），不知道为啥搜不到😂
+---
 
-微信群：刚建好了一个微信群，没有 qq 的可以用这个微信群
-![](https://www.yysuni.com/blogs/readme/343f2c62035b8e23.webp)
+## 使用 GitHub App 进行前端编辑 Using GitHub App for Editing
 
-tg 群：1月1号，才创建的 tg 群 https://t.me/public_blog_2025
+该项目通过 GitHub App + Private Key 的方式在前端生成 Installation Token，并直接调用 GitHub API 提交变更。
 
+### 1. 创建 GitHub App
 
-应该主要是我自己亲自帮助你们遇到问题怎么办。（后续看看有没有好心人）
+在 GitHub 个人账号下创建一个新的 GitHub App（**不是 OAuth App**）：
 
-希望多多的非程序员加入 blogger 行列，web blog 还是很好玩的，属于自己的 blog 世界。
+1. 打开 `Settings -> Developer settings -> GitHub Apps`
+2. 点击 **New GitHub App**
+3. 填写名称、Homepage 随意；Webhook 可以关闭
+4. **Permissions**：
+   - `Repository permissions -> Contents`：**Read and write**
+   - 其余权限保持默认即可
+5. 保存后，在该 App 页点击 **Generate a private key**，下载得到 `.pem` 文件
+6. 记下 **App ID**
 
-游戏资产不一定属于你的，你只有**使用权**，但这个 blog **网站、内容、仓库一定是属于你的**
+然后在 App 的 **Install App** 页面：
 
-#### 特殊的导航 Card
+1. 选择 **Only select repositories**
+2. 只勾选本仓库（例：`ordin-thordata/kael-odin-blog`）
 
-因为这个 Card 是全局都在的，所以放在了 `src/components` 目录
+### 2. 配置环境变量 Environment Variables
 
-![](https://www.yysuni.com/blogs/readme/9780c38f886322fd.png)
+在部署平台（如 Vercel）中配置以下环境变量：
 
-## Star History
+```bash
+NEXT_PUBLIC_GITHUB_OWNER=ordin-thordata
+NEXT_PUBLIC_GITHUB_REPO=kael-odin-blog
+NEXT_PUBLIC_GITHUB_BRANCH=main
+NEXT_PUBLIC_GITHUB_APP_ID=<你的 GitHub App ID>
+NEXT_PUBLIC_GITHUB_ENCRYPT_KEY=<任意一串较长的加密密钥>
+```
 
-<a href="https://www.star-history.com/#YYsuni/2025-blog-public&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=YYsuni/2025-blog-public&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=YYsuni/2025-blog-public&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=YYsuni/2025-blog-public&type=date&legend=top-left" />
- </picture>
-</a>
+> `NEXT_PUBLIC_GITHUB_ENCRYPT_KEY` 用于在浏览器中加密缓存 `.pem`，请自行设置为一串足够随机的字符串。
+
+### 3. 在前端导入 Private Key
+
+1. 打开线上站点，例如 `https://你的-vercel-域名`
+2. 进入写作页 `/write` 或文章列表页 `/blog`、站点配置入口等
+3. 页面中会有“导入密钥”或上传 `.pem` 文件的按钮
+4. 选择你刚才下载的 `.pem`，导入后即可在前端执行：
+   - 发布/更新文章
+   - 更新站点配置
+   - 更新项目、图片、分享等内容
+
+---
+
+## 部署到 Vercel Deploy to Vercel
+
+以 Vercel 为例的部署流程：
+
+1. 将本仓库推送到 GitHub（例如 `ordin-thordata/kael-odin-blog`）
+2. 登录 Vercel，点击 **Add New -> Project**
+3. 在 GitHub 仓库列表中选择本项目，点击 **Import**
+4. 保持构建配置为 Next.js 默认即可（Framework: Next.js）
+5. 在 **Environment Variables** 中添加上一节提到的几项环境变量
+6. 点击 **Deploy**，等待构建完成，即可获得一个 `*.vercel.app` 域名
+
+之后每次向 `main` 分支推送代码，Vercel 会自动触发新的构建和部署。
+
+---
+
+## 与上游模板同步 Updating from Upstream Template
+
+本仓库不是通过 fork 创建，因此同步上游更新可以按下面方式操作：
+
+1. 添加上游远程：
+
+```bash
+git remote add upstream https://github.com/YYsuni/2025-blog-public.git
+```
+
+2. 拉取上游最新代码：
+
+```bash
+git fetch upstream
+```
+
+3. 将上游 `main` 合并到当前分支（或基于它 rebase）：
+
+```bash
+git merge upstream/main
+# 或者：
+# git rebase upstream/main
+```
+
+4. 解决可能的冲突，确认无误后再推送到你自己的远程：
+
+```bash
+git push origin main
+```
+
+建议在单独的分支上测试合并效果，再合入 `main`。
+
+---
+
+## 致谢 Acknowledgements
+
+- 原始开源模板：[`YYsuni/2025-blog-public`](https://github.com/YYsuni/2025-blog-public)
+- GitHub App 管理内容的设计思路参考了作者在 README 和博客中的介绍。
+
+本仓库在此基础上做了定制化配置与内容结构调整，以适配我的个人使用场景。

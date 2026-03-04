@@ -1,7 +1,7 @@
 {
 	"meta": {
 		"title": "Kael Odin's Blog",
-		"description": "Kael 的个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
+		"description": "Kael Odin 的个人博客与数字花园，记录 AI、数据与开发实践，以及一些随想。",
 		"username": "Kael Odin"
 	},
 	"theme": {
@@ -45,7 +45,7 @@
 			"id": "github",
 			"type": "github",
 			"value": "https://github.com/kael-odin",
-			"label": "Github",
+			"label": "GitHub",
 			"order": 1
 		},
 		{
