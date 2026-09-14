@@ -13,9 +13,9 @@ type LikeButtonProps = {
 	delay?: number
 }
 
-const ENDPOINT = 'https://blog-liker.yysuni1001.workers.dev/api/like'
+const ENDPOINT = '/api/like'
 
-export default function LikeButton({ slug = 'yysuni', delay, className }: LikeButtonProps) {
+export default function LikeButton({ slug = 'site', delay, className }: LikeButtonProps) {
 	slug = BLOG_SLUG_KEY + slug
 	const [liked, setLiked] = useState(false)
 	const [show, setShow] = useState(false)
@@ -68,6 +68,7 @@ export default function LikeButton({ slug = 'yysuni', delay, className }: LikeBu
 			const res = await fetch(url, { method: 'POST' })
 			const data = await res.json().catch(() => ({}))
 			if (data.reason == 'rate_limited') toast('谢谢啦😘，今天已经不能再点赞啦💕')
+			if (data.reason == 'not_configured') toast('点赞服务暂未配置，稍后再试试~')
 			const value = typeof data?.count === 'number' ? data.count : (fetchedCount ?? 0) + 1
 			await mutate(value, { revalidate: false })
 		} catch {
