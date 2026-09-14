@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#FDFAF4"/>
+      <stop offset="100%" stop-color="#F3EDE3"/>
+    </radialGradient>
+    <linearGradient id="hairTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3A4670"/>
+      <stop offset="55%" stop-color="#2A3350"/>
+      <stop offset="100%" stop-color="#1E2539"/>
+    </linearGradient>
+    <linearGradient id="iris" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#79A5F2"/>
+      <stop offset="55%" stop-color="#4A7DDB"/>
+      <stop offset="100%" stop-color="#2E56A8"/>
+    </linearGradient>
+    <linearGradient id="tee" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3ECDB6"/>
+      <stop offset="100%" stop-color="#2FA893"/>
+    </linearGradient>
+    <linearGradient id="leafA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8FD483"/>
+      <stop offset="100%" stop-color="#5FAE62"/>
+    </linearGradient>
+    <linearGradient id="leafB" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A8E29A"/>
+      <stop offset="100%" stop-color="#6FBE6E"/>
+    </linearGradient>
+    <clipPath id="hairClip">
+      <path d="M256 74
+        C170 74 118 134 120 224
+        C121 250 124 258 128 268
+        L138 232
+        C142 250 148 258 154 264
+        C158 248 158 234 154 218
+        C164 236 176 244 188 246
+        C184 230 184 216 188 202
+        C198 222 214 234 232 236
+        C226 220 226 204 232 190
+        C244 208 262 218 280 218
+        C276 202 278 188 286 176
+        C294 194 308 206 326 208
+        C324 194 328 182 336 172
+        C344 188 356 198 370 202
+        C368 214 370 226 376 236
+        C380 244 384 250 384 268
+        C388 258 391 250 392 224
+        C394 134 342 74 256 74 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <!-- body / tee -->
+  <path d="M131 512 C133 452 158 416 200 400 C226 390 236 386 236 372 L276 372 C276 386 286 390 312 400 C354 416 379 452 381 512 Z" fill="url(#tee)"/>
+  <path d="M131 512 C133 452 158 416 200 400 C212 448 208 480 204 512 Z" fill="#27957F" opacity="0.32"/>
+  <path d="M381 512 C379 452 354 416 312 400 C316 414 318 428 318 442 C332 470 338 490 340 512 Z" fill="#27957F" opacity="0.26"/>
+  <path d="M232 376 C240 388 250 393 256 393 C262 393 272 388 280 376 C272 370 264 368 256 368 C248 368 240 370 232 376 Z" fill="#1F7D6C"/>
+  <path d="M238 348 L238 376 C238 384 246 390 256 390 C266 390 274 384 274 376 L274 348 Z" fill="#F7CFA8"/>
+  <path d="M238 348 L238 362 C248 368 264 368 274 362 L274 348 Z" fill="#E8B98F" opacity="0.7"/>
+
+  <!-- ears -->
+  <ellipse cx="128" cy="272" rx="17" ry="22" fill="#FFDDC0"/>
+  <ellipse cx="131" cy="272" rx="8" ry="12" fill="#F2B892" opacity="0.7"/>
+  <ellipse cx="384" cy="272" rx="17" ry="22" fill="#FFDDC0"/>
+  <ellipse cx="381" cy="272" rx="8" ry="12" fill="#F2B892" opacity="0.7"/>
+
+  <!-- head -->
+  <path d="M256 88 C172 88 122 146 122 228 C122 316 178 372 256 372 C334 372 390 316 390 228 C390 146 340 88 256 88 Z" fill="#FFE9D2"/>
+
+  <!-- cheek blush -->
+  <ellipse cx="174" cy="310" rx="25" ry="13" fill="#FFB9A0" opacity="0.5"/>
+  <ellipse cx="338" cy="310" rx="25" ry="13" fill="#FFB9A0" opacity="0.5"/>
+
+  <!-- hair: one dome with irregular fringe -->
+  <path d="M256 74
+    C170 74 118 134 120 224
+    C121 250 124 258 128 268
+    L138 232
+    C142 250 148 258 154 264
+    C158 248 158 234 154 218
+    C164 236 176 244 188 246
+    C184 230 184 216 188 202
+    C198 222 214 234 232 236
+    C226 220 226 204 232 190
+    C244 208 262 218 280 218
+    C276 202 278 188 286 176
+    C294 194 308 206 326 208
+    C324 194 328 182 336 172
+    C344 188 356 198 370 202
+    C368 214 370 226 376 236
+    C380 244 384 250 384 268
+    C388 258 391 250 392 224
+    C394 134 342 74 256 74 Z" fill="url(#hairTop)"/>
+  <g clipPath="url(#hairClip)">
+    <!-- hair sheen -->
+    <path d="M168 122 C194 98 230 90 260 92 C228 98 202 110 186 128 C180 134 164 132 168 122 Z" fill="#57659E" opacity="0.9"/>
+    <path d="M304 94 C322 98 338 108 350 120 C340 116 326 112 312 112 C304 110 300 96 304 94 Z" fill="#485480" opacity="0.85"/>
+    <!-- strand lines -->
+    <path d="M216 100 C200 112 190 128 186 146" stroke="#161C2D" stroke-width="4" fill="none" opacity="0.5" stroke-linecap="round"/>
+    <path d="M300 102 C314 112 324 128 328 146" stroke="#161C2D" stroke-width="4" fill="none" opacity="0.5" stroke-linecap="round"/>
+    <!-- soft fringe underline -->
+    <path d="M156 224 C166 238 178 244 190 246 M190 206 C200 224 214 234 230 236 M234 194 C246 210 262 218 278 218 M288 182 C296 198 308 206 324 208 M338 176 C346 190 356 198 368 202" stroke="#161C2D" stroke-width="5" fill="none" opacity="0.45" stroke-linecap="round"/>
+  </g>
+
+  <!-- sprout -->
+  <path d="M258 76 C257 60 262 48 274 38" stroke="#5C9A57" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M274 38 C258 30 244 33 236 44 C252 52 266 49 274 38 Z" fill="url(#leafA)"/>
+  <path d="M274 38 C288 24 306 24 317 36 C303 48 285 47 274 38 Z" fill="url(#leafB)"/>
+  <path d="M274 38 C270 33 268 28 269 22" stroke="#4E8A4C" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round"/>
+
+  <!-- eyebrows -->
+  <path d="M174 262 C186 254 202 254 214 260" stroke="#2A3350" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M298 260 C310 254 326 254 338 262" stroke="#2A3350" stroke-width="9" fill="none" stroke-linecap="round"/>
+
+  <!-- eyes -->
+  <g>
+    <ellipse cx="194" cy="296" rx="25" ry="31" fill="#1D2540"/>
+    <circle cx="195" cy="298" r="17" fill="url(#iris)"/>
+    <circle cx="195" cy="301" r="8" fill="#152042"/>
+    <circle cx="201" cy="290" r="5.5" fill="#FFFFFF"/>
+    <circle cx="189" cy="308" r="2.5" fill="#AFCFFF" opacity="0.85"/>
+  </g>
+  <g>
+    <ellipse cx="318" cy="296" rx="25" ry="31" fill="#1D2540"/>
+    <circle cx="317" cy="298" r="17" fill="url(#iris)"/>
+    <circle cx="317" cy="301" r="8" fill="#152042"/>
+    <circle cx="323" cy="290" r="5.5" fill="#FFFFFF"/>
+    <circle cx="311" cy="308" r="2.5" fill="#AFCFFF" opacity="0.85"/>
+  </g>
+
+  <!-- nose + mouth -->
+  <path d="M253 322 C255 324 257 324 259 322" stroke="#E8B48A" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M240 340 C248 350 264 350 272 340 C268 354 244 354 240 340 Z" fill="#B3573F"/>
+  <path d="M246 346 C252 352 260 352 266 346 C262 351 250 351 246 346 Z" fill="#E58868"/>
+</svg>

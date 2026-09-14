@@ -11,6 +11,7 @@ const {
 } = siteContent
 
 export const metadata: Metadata = {
+	metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kael-odin-blog.vercel.app'),
 	title,
 	description,
 	openGraph: {
