@@ -5,33 +5,37 @@ import Card from '@/components/card'
 import { useCenterStore } from '@/hooks/use-center'
 import { useConfigStore } from './stores/config-store'
 import { CARD_SPACING } from '@/consts'
-import shareList from '@/app/share/list.json'
-import Link from 'next/link'
+import quoteList from '@/config/daily-quotes.json'
 import { HomeDraggableLayer } from './home-draggable-layer'
 
-type ShareItem = {
-	name: string
-	url: string
-	logo: string
-	description: string
-	tags: string[]
-	stars: number
+type Quote = {
+	text: string
+	from: string
 }
 
-export default function ShareCard() {
+// 以日期为种子做一次散列：同一天稳定展示同一条，隔天自动换一条
+function pickDailyQuote(): Quote {
+	const now = new Date()
+	const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate()
+	let x = (seed ^ 0x5f3759df) >>> 0
+	x = Math.imul(x ^ (x >>> 15), 0x2545f491) >>> 0
+	x = (Math.imul(x ^ (x >>> 13), 0x27d4eb2d) >>> 0) % quoteList.length
+	return quoteList[x] ?? quoteList[0]
+}
+
+export default function DailyQuoteCard() {
 	const center = useCenterStore()
 	const { cardStyles, siteContent } = useConfigStore()
-	const [randomItem, setRandomItem] = useState<ShareItem | null>(null)
+	const [quote, setQuote] = useState<Quote | null>(null)
 	const styles = cardStyles.shareCard
 	const hiCardStyles = cardStyles.hiCard
 	const socialButtonsStyles = cardStyles.socialButtons
 
 	useEffect(() => {
-		const randomIndex = Math.floor(Math.random() * shareList.length)
-		setRandomItem(shareList[randomIndex])
+		setQuote(pickDailyQuote())
 	}, [])
 
-	if (!randomItem) {
+	if (!quote) {
 		return null
 	}
 
@@ -52,18 +56,12 @@ export default function ShareCard() {
 					</>
 				)}
 
-				<h2 className='text-secondary text-sm'>随机推荐</h2>
+				<h2 className='text-secondary text-sm'>每日一签</h2>
 
-				<Link href='/share' className='mt-2 block space-y-2'>
-					<div className='flex items-center'>
-						<div className='relative mr-3 h-12 w-12 shrink-0 overflow-hidden rounded-xl'>
-							<img src={randomItem.logo} alt={randomItem.name} className='h-full w-full object-contain' />
-						</div>
-						<h3 className='text-sm font-medium'>{randomItem.name}</h3>
-					</div>
-
-					<p className='text-secondary line-clamp-3 text-xs'>{randomItem.description}</p>
-				</Link>
+				<div className='mt-2 block space-y-2'>
+					<p className='text-primary line-clamp-4 text-sm leading-relaxed'>「{quote.text}」</p>
+					<p className='text-secondary text-right text-xs'>—— {quote.from}</p>
+				</div>
 			</Card>
 		</HomeDraggableLayer>
 	)

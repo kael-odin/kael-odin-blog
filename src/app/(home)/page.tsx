@@ -5,7 +5,7 @@ import ArtCard from '@/app/(home)/art-card'
 import ClockCard from '@/app/(home)/clock-card'
 import CalendarCard from '@/app/(home)/calendar-card'
 import SocialButtons from '@/app/(home)/social-buttons'
-import ShareCard from '@/app/(home)/share-card'
+import DailyQuoteCard from '@/app/(home)/daily-quote-card'
 import AritcleCard from '@/app/(home)/aritcle-card'
 import WriteButtons from '@/app/(home)/write-buttons'
 import LikePosition from './like-position'
@@ -82,7 +82,7 @@ export default function Home() {
 				{!maxSM && cardStyles.clockCard?.enabled !== false && <ClockCard />}
 				{!maxSM && cardStyles.calendarCard?.enabled !== false && <CalendarCard />}
 				{cardStyles.socialButtons?.enabled !== false && <SocialButtons />}
-				{!maxSM && cardStyles.shareCard?.enabled !== false && <ShareCard />}
+				{!maxSM && cardStyles.shareCard?.enabled !== false && <DailyQuoteCard />}
 				{cardStyles.articleCard?.enabled !== false && <AritcleCard />}
 				{!maxSM && cardStyles.writeButtons?.enabled !== false && <WriteButtons />}
 				{cardStyles.likePosition?.enabled !== false && <LikePosition />}

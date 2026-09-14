@@ -14,6 +14,8 @@ interface Live2DModelInstance {
 	anchor: { set: (x: number, y: number) => void }
 	x: number
 	y: number
+	width: number
+	height: number
 	scale: { set: (x: number, y: number) => void }
 }
 
@@ -94,7 +96,8 @@ export default function Live2DViewer() {
 				model.anchor.set(0.5, 0.5)
 				model.x = width / 2
 				model.y = height / 2
-				model.scale.set(0.25, 0.25)
+				const fit = Math.min(width / model.width, height / model.height) * 0.72
+				model.scale.set(fit, fit)
 
 				setStatus('ready')
 			} catch (err) {
