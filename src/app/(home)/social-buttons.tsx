@@ -134,7 +134,8 @@ export default function SocialButtons() {
 			initial: { opacity: 0, scale: 0.6 } as const,
 			animate: { opacity: 1, scale: 1 } as const,
 			whileHover: { scale: 1.05 } as const,
-			whileTap: { scale: 0.95 } as const
+			whileTap: { scale: 0.95 } as const,
+			'aria-label': button.label || button.type
 		}
 
 		const Icon = iconMap[button.type]
