@@ -204,7 +204,9 @@
 
 /* Tables */
 .prose table {
-	width: 100%;
+	display: block;
+	max-width: 100%;
+	overflow-x: auto;
 	border-collapse: collapse;
 	font-size: 0.95em;
 	margin: 1em 0;
@@ -227,6 +229,13 @@
 .prose iframe {
 	border: 1px solid rgba(0, 0, 0, 0.08);
 	border-radius: 8px;
+}
+
+/* KaTeX 块级公式在窄屏可横向滚动，避免溢出 */
+.prose .katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0;
 }
 
 /* ===== 暗色模式覆盖 ===== */
