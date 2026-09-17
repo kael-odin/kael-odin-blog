@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'motion/react'
-import Image from 'next/image'
 import { INIT_DELAY } from '@/consts'
 import { useMarkdownRender } from '@/hooks/use-markdown-render'
 import { useSize } from '@/hooks/use-size'
@@ -46,12 +45,9 @@ export function BlogPreview({ markdown, title, tags, date, summary, cover, slug 
 
 					<div className='text-secondary mt-3 text-center text-sm'>{date}</div>
 
-					{/* 移动端没有侧栏，封面在这里补一张（桌面端由侧栏展示） */}
-					{cover && (
-						<div className='relative mt-6 aspect-[2/1] w-full overflow-hidden rounded-xl sm:hidden'>
-							<Image src={cover} alt='cover' fill sizes='100vw' className='object-cover' />
-						</div>
-					)}
+					{/* 移动端没有侧栏，封面在这里补一张（桌面端由侧栏展示）。
+					    用原生 img：编辑器预览传入的是 blob URL，next/image 无法处理 */}
+					{cover && <img src={cover} alt='cover' loading='lazy' className='mt-6 aspect-[2/1] w-full rounded-xl object-cover sm:hidden' />}
 
 					{summary && summaryInContent && <div className='text-secondary mt-6 cursor-text text-center text-sm'>“{summary}”</div>}
 

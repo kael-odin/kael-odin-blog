@@ -85,7 +85,7 @@ export default function BlogArticleView({ slug }: { slug: string }) {
 				tags={tags}
 				date={date}
 				summary={blog.config.summary}
-				cover={blog.cover ? (blog.cover.startsWith('http') ? blog.cover : `${window.location.origin}${blog.cover}`) : undefined}
+				cover={blog.cover}
 				slug={slug}
 			/>
 
