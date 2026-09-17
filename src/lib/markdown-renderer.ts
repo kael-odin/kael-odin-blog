@@ -23,7 +23,8 @@ async function loadMermaid() {
 		mermaid.initialize({
 			startOnLoad: false,
 			securityLevel: 'strict',
-			theme: 'neutral'
+			// 图表配色跟随当前明暗主题（切换主题后刷新页面生效）
+			theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'neutral'
 		})
 		mermaidModule = mermaid
 		return mermaidModule
