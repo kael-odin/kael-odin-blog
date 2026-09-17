@@ -170,7 +170,7 @@ export default function Page() {
 				)}
 			</div>
 
-			<motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} className='absolute top-4 right-6 flex gap-3 max-sm:hidden'>
+			<motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} className='absolute top-3 right-3 left-3 flex flex-wrap justify-end gap-2 sm:top-4 sm:right-6 sm:left-auto'>
 				{isEditMode ? (
 					<>
 						<motion.button
