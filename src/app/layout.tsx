@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import Layout from '@/layout'
 import Head from '@/layout/head'
 import siteContent from '@/config/site-content.json'
+import { Analytics } from '@vercel/analytics/react'
 
 const {
 	meta: { title, description },
@@ -71,6 +72,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 				<script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
 
 				<Layout>{children}</Layout>
+
+				{/* Vercel Web Analytics：本地开发自动跳过，仅线上采集（Vercel 控制台可看流量） */}
+				<Analytics debug={false} />
 			</body>
 		</html>
 	)
