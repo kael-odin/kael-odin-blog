@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import { GITHUB_CONFIG } from '@/consts'
 import { getAuthToken } from '@/lib/auth'
-import { createBlob, createCommit, createTree, getRef, listRepoFilesRecursive, toBase64Utf8, type TreeItem, updateRef } from '@/lib/github-client'
+import { createBlob, createCommit, createTree, getRef, listRepoFilesRecursive, readTextFileFromRepo, toBase64Utf8, type TreeItem, updateRef } from '@/lib/github-client'
 import type { BlogIndexItem } from '@/lib/blog-index'
 
 export async function saveBlogEdits(originalItems: BlogIndexItem[], nextItems: BlogIndexItem[], categories: string[]): Promise<void> {
@@ -32,7 +32,24 @@ export async function saveBlogEdits(originalItems: BlogIndexItem[], nextItems: B
 	}
 
 	toast.info('正在更新索引...')
-	const sortedItems = [...nextItems].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+	// 保存时重读远端最新索引做增量合并：页面快照只表达「删除了谁、改了谁」，
+	// 并发期间新发布的文章（页面不知道的条目）原样保留，避免被旧快照覆写丢失
+	let remoteItems: BlogIndexItem[] = []
+	try {
+		const remoteRaw = await readTextFileFromRepo(token, GITHUB_CONFIG.OWNER, GITHUB_CONFIG.REPO, 'public/blogs/index.json', latestCommitSha)
+		remoteItems = JSON.parse(remoteRaw || '[]') as BlogIndexItem[]
+		if (!Array.isArray(remoteItems)) remoteItems = []
+	} catch {
+		remoteItems = []
+	}
+	const nextBySlug = new Map(nextItems.map(item => [item.slug, item]))
+	const merged = remoteItems
+		.filter(item => item?.slug && !uniqueRemoved.includes(item.slug))
+		.map(item => nextBySlug.get(item.slug) ?? item)
+	for (const next of nextItems) {
+		if (next?.slug && !merged.some(item => item.slug === next.slug)) merged.push(next)
+	}
+	const sortedItems = [...merged].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 	const indexJson = JSON.stringify(sortedItems, null, 2)
 	const indexBlob = await createBlob(token, GITHUB_CONFIG.OWNER, GITHUB_CONFIG.REPO, toBase64Utf8(indexJson), 'base64')
 	treeItems.push({
