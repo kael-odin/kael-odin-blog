@@ -27,22 +27,25 @@
 | 编辑器分屏预览 | 宽屏（2xl）右侧实时预览，开关持久化；slug 由标题自动生成（中文转拼音，按需加载 pinyin-pro） |
 
 ### P2 — 体验与清理
+- **暗色模式（全站）**：左下角太阳/月亮切换器（localStorage 持久化 + 首帧防闪烁脚本）；`--lc-*`/`--dk-*` 双层 token 映射，站点配置的浅色主题不受影响；代码块 shiki 双主题（one-light / one-dark-pro）；mermaid 图表跟随主题；背景插画自动压暗；全站 50+ 文件补齐 `dark:` 配对类。浏览器逐页 QA 通过（首页/文章/编辑器/项目/关于 + 往返切换与浅色回归检查）。
+- **编辑器移动端适配**：窄屏纵向堆叠、操作按钮换行，手机可以写文章了。
 - 音乐卡歌单化：`src/config/playlist.json` 追加 `{name,url}` 即可加歌，自动连播/跳错曲。
 - giscus 评论脚手架：默认关闭；在 giscus.app 生成参数填入 `site-content.json → comments.giscus` 并 `enabled:true` 即启用。
 - 清理：`lang=zh-CN`、允许双指缩放、About 文案个人化、删除死代码（`music/list.ts`、`batch-delete-blogs.ts`、`upsertBlogsIndex`）、移除原作者残留（'Suni' 回退、package/wrangler 名称）。
 
 ## 📌 使用备忘
-- **写文章**：首页「写文章」→ 导入 .pem（Downloads 里有 `kael-odin-blog.*.pem`）→ 编辑器改完即自动存草稿。
+- **写文章**：首页「写文章」→ 导入 .pem（Downloads 里有 `kael-odin-blog.*.pem`）→ 编辑器改完即自动存草稿；手机也能写。
+- **明暗主题**：左下角太阳/月亮按钮，选择会记住；文章内代码块、mermaid 图表都会跟随。
 - **加音乐**：音频放 `public/music/`，在 `src/config/playlist.json` 加一条。
 - **开评论**：见上 giscus 三步。
 - **视频**：B站/YouTube 直接贴链接；本地视频≤80MB 从「图片管理」上传。
 
 ## 🔜 待办（按价值排序，未实施）
-1. **暗色模式全站化**：工程量大（全站浅色主题 + 12 张卡片配色基于 CSS 变量，需成对设计暗色 token + shiki 双主题）。本次只做了基础设施（代码块仍 one-light 单主题）。
-2. **移动端编辑**：所有编辑工具栏 `max-sm:hidden`，手机端建议至少开放文章编辑器。
-3. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
-4. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
-5. 图片 next/image 迁移：全站多为原生 `<img>`（文章内图已有 lazy），迁移可进一步优化 LCP/CLS，但涉及面广。
+1. **管理后台移动端**：文章编辑器已适配手机，但 projects/share/bloggers/pictures 的编辑工具栏仍 `max-sm:hidden`。
+2. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
+3. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
+4. 图片 next/image 迁移：全站多为原生 `<img>`（文章内图已有 lazy），迁移可进一步优化 LCP/CLS，但涉及面广。
+5. 暗色下的圣诞主题（enableChristmas）装饰色未专门调校，冬季开启前可顺手看一眼。
 
 ## 🔧 运维备忘
 - Vercel 环境变量：`NEXT_PUBLIC_GITHUB_APP_ID=3002414`、`GITHUB_APP_PRIVATE_KEY`（.pem 全文）。**改 NEXT_PUBLIC_* 后必须 Redeploy**。
