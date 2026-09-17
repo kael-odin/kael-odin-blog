@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import dayjs from 'dayjs'
 import { motion } from 'motion/react'
 import { BlogPreview } from '@/components/blog-preview'
+import { GiscusComments } from '@/components/giscus-comments'
 import { loadBlog, type BlogConfig } from '@/lib/load-blog'
 import { hasAuth } from '@/lib/auth'
 import { useReadArticles } from '@/hooks/use-read-articles'
@@ -88,6 +89,7 @@ export default function BlogArticleView({ slug }: { slug: string }) {
 				slug={slug}
 			/>
 
+			{!blog.config.hidden && <GiscusComments slug={slug} title={title} />}
 			<motion.button
 				initial={{ opacity: 0, scale: 0.6 }}
 				animate={{ opacity: 1, scale: 1 }}

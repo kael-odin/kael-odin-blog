@@ -11,7 +11,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	// 3. 最后回退到本地开发地址
 	const baseUrl = process.env.SITE_URL ? process.env.SITE_URL : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
 
-	console.log(`[Sitemap] Generating for: ${baseUrl}`)
 
 	// hidden 文章不进 sitemap，避免被搜索引擎收录
 	const posts: BlogIndexItem[] = (blogIndex as BlogIndexItem[]).filter(post => post?.slug && !post.hidden)

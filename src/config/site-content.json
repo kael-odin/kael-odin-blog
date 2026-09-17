@@ -74,5 +74,14 @@
 	"beian": {
 		"text": "",
 		"link": ""
+	},
+	"comments": {
+		"giscus": {
+			"enabled": false,
+			"repo": "",
+			"repoId": "",
+			"category": "Announcements",
+			"categoryId": ""
+		}
 	}
 }
