@@ -287,7 +287,7 @@ const FloatingImage = ({
 				}
 				transition={{ type: 'tween', ease: 'easeOut' }}
 				className={cn(
-					'pointer-events-auto absolute origin-center -translate-1/2 cursor-pointer shadow-xl transition-[scale]',
+					'group pointer-events-auto absolute origin-center -translate-1/2 cursor-pointer shadow-xl transition-[scale]',
 					!isEditMode && !isZoomed && 'hover:scale-105'
 				)}>
 				<motion.img

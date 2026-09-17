@@ -2,7 +2,21 @@ import { create } from 'zustand'
 import { toast } from 'sonner'
 import { hashFileSHA256 } from '@/lib/file-utils'
 import { loadBlog } from '@/lib/load-blog'
+import { draftKey, draftToStoreAssets, loadDraft, type DraftPayload } from '../services/draft-store'
 import type { PublishForm, ImageItem } from '../types'
+
+/** 单张图片转 dataUrl 的上限（超过则不随本地草稿持久化） */
+const DATAURL_BUDGET = 400 * 1024
+
+function readAsDataUrl(file: File): Promise<string | null> {
+	return new Promise(resolve => {
+		if (file.size > DATAURL_BUDGET) return resolve(null)
+		const reader = new FileReader()
+		reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null)
+		reader.onerror = () => resolve(null)
+		reader.readAsDataURL(file)
+	})
+}
 
 export const formatDateTimeLocal = (date: Date = new Date()): string => {
 	const pad = (n: number) => String(n).padStart(2, '0')
@@ -41,6 +55,9 @@ type WriteStore = {
 
 	// Load blog for editing
 	loadBlogForEdit: (slug: string) => Promise<void>
+
+	// Restore local draft
+	restoreFromDraft: (draft: DraftPayload) => Promise<{ filesDropped: boolean }>
 
 	// Reset to create mode
 	reset: () => void
@@ -115,14 +132,17 @@ export const useWriteStore = create<WriteStore>((set, get) => ({
 			}
 		}
 
-		// 处理新图片
+		// 处理新图片（小图同时生成 dataUrl 供本地草稿持久化）
 		if (unique.length > 0) {
-			const newItems: ImageItem[] = unique.map(({ file, hash }) => {
-				const id = Math.random().toString(36).slice(2, 10)
-				const previewUrl = URL.createObjectURL(file)
-				const filename = file.name
-				return { id, type: 'file', file, previewUrl, filename, hash }
-			})
+			const newItems: ImageItem[] = await Promise.all(
+				unique.map(async ({ file, hash }) => {
+					const id = Math.random().toString(36).slice(2, 10)
+					const previewUrl = URL.createObjectURL(file)
+					const filename = file.name
+					const dataUrl = await readAsDataUrl(file)
+					return { id, type: 'file', file, previewUrl, filename, hash, dataUrl: dataUrl || undefined } as ImageItem
+				})
+			)
 
 			set(state => ({ images: [...newItems, ...state.images] }))
 			resultImages.push(...newItems)
@@ -203,12 +223,32 @@ export const useWriteStore = create<WriteStore>((set, get) => ({
 			})
 
 			toast.success('博客加载成功')
+
+			// 线上加载完后检查本地草稿：若与线上内容不同，视为未保存的修改，恢复之
+			const draft = loadDraft(draftKey('edit', slug))
+			if (draft && draft.form.md !== blog.markdown) {
+				await get().restoreFromDraft(draft)
+				toast.success('已恢复本地未保存的修改', {
+					description: `草稿保存于 ${new Date(draft.savedAt).toLocaleString('zh-CN')}，发布后自动清除`
+				})
+			}
 		} catch (err: any) {
 			console.error('Failed to load blog:', err)
 			toast.error(err?.message || '加载博客失败')
 			set({ loading: false })
 			throw err
 		}
+	},
+
+	// Restore local draft
+	restoreFromDraft: async (draft: DraftPayload) => {
+		const { images, cover, filesDropped } = await draftToStoreAssets(draft)
+		set({
+			form: { ...draft.form },
+			images,
+			cover
+		})
+		return { filesDropped }
 	},
 
 	// Reset to create mode

@@ -61,9 +61,39 @@ async function getCredential(): Promise<string> {
 	return getInstallToken()
 }
 
+// Installation token 有效期 1 小时，内存缓存避免每次读数都签 JWT
+let cachedToken: { token: string; expiresAt: number } | null = null
+
+async function getCredentialCached(): Promise<string | null> {
+	try {
+		if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN
+		if (cachedToken && Date.now() < cachedToken.expiresAt) return cachedToken.token
+		const token = await getInstallToken()
+		cachedToken = { token, expiresAt: Date.now() + 45 * 60 * 1000 }
+		return token
+	} catch {
+		return null
+	}
+}
+
 type LikesMap = Record<string, number>
 
 async function readLikesFromGithub(): Promise<LikesMap> {
+	// 优先走 Contents API：无 CDN 缓存，写入后立即可读；无凭据时回退 raw（约 5 分钟 CDN 延迟）
+	const credential = await getCredentialCached()
+	if (credential) {
+		const res = await fetch(`${GH_API}/repos/${GITHUB_CONFIG.OWNER}/${GITHUB_CONFIG.REPO}/contents/${FILE_PATH}`, {
+			headers: { ...GH_HEADERS, Authorization: `Bearer ${credential}` },
+			cache: 'no-store'
+		})
+		if (res.ok) {
+			const data = (await res.json()) as { content?: string }
+			return JSON.parse(Buffer.from(data.content ?? '', 'base64').toString('utf-8')) as LikesMap
+		}
+		if (res.status !== 404) throw new Error(`read likes failed: ${res.status}`)
+		return {}
+	}
+
 	const res = await fetch(RAW_URL, { cache: 'no-store' })
 	if (res.status === 404) return {}
 	if (!res.ok) throw new Error(`read likes failed: ${res.status}`)

@@ -1,4 +1,4 @@
-import { toBase64Utf8, getRef, createTree, createCommit, updateRef, createBlob, type TreeItem } from '@/lib/github-client'
+import { toBase64Utf8, getRef, createTree, createCommit, updateRef, createBlob, readTextFileFromRepo, type TreeItem } from '@/lib/github-client'
 import { fileToBase64NoPrefix, hashFileSHA256 } from '@/lib/file-utils'
 import { prepareBlogsIndex } from '@/lib/blog-index'
 import { getAuthToken } from '@/lib/auth'
@@ -28,7 +28,12 @@ export type PushBlogParams = {
 export async function pushBlog(params: PushBlogParams): Promise<void> {
 	const { form, cover, images, mode = 'create', originalSlug } = params
 
+	// 基础校验（放在鉴权之前，未导入私钥也能先得到表单错误提示）
 	if (!form?.slug) throw new Error('需要 slug')
+	if (!form.title?.trim()) throw new Error('标题不能为空')
+	if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$/.test(form.slug)) {
+		throw new Error('slug 只能包含英文、数字、连字符和下划线，以英文或数字开头，长度不超过 80')
+	}
 
 	if (mode === 'edit' && originalSlug && originalSlug !== form.slug) {
 		throw new Error('编辑模式下不支持修改 slug，请保持原 slug 不变')
@@ -40,6 +45,19 @@ export async function pushBlog(params: PushBlogParams): Promise<void> {
 	toast.info('正在获取分支信息...')
 	const refData = await getRef(token, GITHUB_CONFIG.OWNER, GITHUB_CONFIG.REPO, `heads/${GITHUB_CONFIG.BRANCH}`)
 	const latestCommitSha = refData.sha
+
+	// 新建模式查重，防止同 slug 静默覆盖旧文
+	if (mode === 'create') {
+		const indexRaw = await readTextFileFromRepo(token, GITHUB_CONFIG.OWNER, GITHUB_CONFIG.REPO, 'public/blogs/index.json', latestCommitSha)
+		try {
+			const list = JSON.parse(indexRaw || '[]') as Array<{ slug: string; title?: string }>
+			const dup = list.find(item => item.slug === form.slug)
+			if (dup) throw new Error(`slug「${form.slug}」已被文章《${dup.title || dup.slug}》占用，请更换 slug`)
+		} catch (err) {
+			if (err instanceof Error && err.message.includes('占用')) throw err
+			// 索引缺失/损坏时不阻塞发布
+		}
+	}
 
 	const basePath = `public/blogs/${form.slug}`
 	const commitMessage = mode === 'edit' ? `更新文章: ${form.slug}` : `新增文章: ${form.slug}`

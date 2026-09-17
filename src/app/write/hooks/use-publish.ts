@@ -5,6 +5,7 @@ import { pushBlog } from '../services/push-blog'
 import { deleteBlog } from '../services/delete-blog'
 import { useWriteStore } from '../stores/write-store'
 import { useAuthStore } from '@/hooks/use-auth'
+import { clearDraft, draftKey } from '../services/draft-store'
 
 export function usePublish() {
 	const { loading, setLoading, form, cover, images, mode, originalSlug } = useWriteStore()
@@ -29,6 +30,10 @@ export function usePublish() {
 				originalSlug
 			})
 
+			// 发布成功后清除对应本地草稿（编辑模式同时清掉可能残留的 new 草稿）
+			clearDraft(draftKey(mode, originalSlug))
+			clearDraft(draftKey('create', null))
+
 			const successMsg = mode === 'edit' ? '更新成功' : '发布成功'
 			toast.success(successMsg)
 		} catch (err: any) {
@@ -48,6 +53,7 @@ export function usePublish() {
 		try {
 			setLoading(true)
 			await deleteBlog(targetSlug)
+			clearDraft(draftKey('edit', targetSlug))
 		} catch (err: any) {
 			console.error(err)
 			toast.error(err?.message || '删除失败')

@@ -13,7 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	console.log(`[Sitemap] Generating for: ${baseUrl}`)
 
-	let posts: BlogIndexItem[] = blogIndex
+	// hidden 文章不进 sitemap，避免被搜索引擎收录
+	const posts: BlogIndexItem[] = (blogIndex as BlogIndexItem[]).filter(post => post?.slug && !post.hidden)
 
 	const postEntries: MetadataRoute.Sitemap = posts.map(post => ({
 		url: `${baseUrl}/blog/${post.slug}`,

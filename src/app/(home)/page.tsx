@@ -15,9 +15,13 @@ import { useSize } from '@/hooks/use-size'
 import { motion } from 'motion/react'
 import { useLayoutEditStore } from './stores/layout-edit-store'
 import { useConfigStore } from './stores/config-store'
+import { useAuthStore } from '@/hooks/use-auth'
+import { hasAuth } from '@/lib/auth'
+import { readFileAsText } from '@/lib/file-utils'
+import { pushCardStyles } from './services/push-card-styles'
 import { toast } from 'sonner'
 import ConfigDialog from './config-dialog/index'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import SnowfallBackground from '@/layout/backgrounds/snowfall'
 
 export default function Home() {
@@ -26,10 +30,41 @@ export default function Home() {
 	const editing = useLayoutEditStore(state => state.editing)
 	const saveEditing = useLayoutEditStore(state => state.saveEditing)
 	const cancelEditing = useLayoutEditStore(state => state.cancelEditing)
+	const setPrivateKey = useAuthStore(state => state.setPrivateKey)
+	const pemInputRef = useRef<HTMLInputElement>(null)
+	const savingRef = useRef(false)
 
-	const handleSave = () => {
-		saveEditing()
-		toast.success('首页布局偏移已保存（尚未提交到远程配置）')
+	const handleSave = async () => {
+		if (savingRef.current) return
+		if (!(await hasAuth())) {
+			pemInputRef.current?.click()
+			return
+		}
+		savingRef.current = true
+		try {
+			await pushCardStyles(useConfigStore.getState().cardStyles)
+			saveEditing()
+		} catch (err: any) {
+			console.error(err)
+			toast.error(`保存布局失败：${err?.message || '未知错误'}`)
+		} finally {
+			savingRef.current = false
+		}
+	}
+
+	const handleChoosePem = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		e.target.value = ''
+		if (!file) return
+		try {
+			const pem = await readFileAsText(file)
+			await setPrivateKey(pem)
+			toast.success('密钥导入成功')
+			await handleSave()
+		} catch (error) {
+			console.error('Failed to read private key:', error)
+			toast.error('读取密钥文件失败')
+		}
 	}
 
 	const handleCancel = () => {
@@ -55,6 +90,8 @@ export default function Home() {
 		<>
 			{siteContent.enableChristmas && <SnowfallBackground zIndex={0} count={!maxSM ? 125 : 20} />}
 
+			<input ref={pemInputRef} type='file' accept='.pem,.txt' className='hidden' onChange={handleChoosePem} />
+
 			{editing && (
 				<div className='pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center pt-6'>
 					<div className='pointer-events-auto flex items-center gap-3 rounded-2xl bg-white/80 px-4 py-2 shadow-lg backdrop-blur'>
@@ -69,7 +106,7 @@ export default function Home() {
 								取消
 							</motion.button>
 							<motion.button type='button' whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleSave} className='brand-btn px-3 py-1 text-xs'>
-								保存偏移
+								保存布局
 							</motion.button>
 						</div>
 					</div>

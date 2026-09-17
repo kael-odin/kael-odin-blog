@@ -1,13 +1,44 @@
 import { motion } from 'motion/react'
 import { useWriteStore } from '../stores/write-store'
+import { usePreviewStore } from '../stores/preview-store'
 import { INIT_DELAY } from '@/consts'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { buildDraftPayload, draftKey, formatDraftTime, saveDraft } from '../services/draft-store'
 
 const defaultText = 'text'
 
 export function WriteEditor() {
 	const { form, updateForm, images, addFiles } = useWriteStore()
+	const { mode, originalSlug } = useWriteStore()
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
+	const [savedAt, setSavedAt] = useState<number | null>(null)
+
+	// 自动保存到本地草稿：表单/封面/图片任一变化后 800ms 落盘
+	useEffect(() => {
+		let timer: ReturnType<typeof setTimeout> | null = null
+		const unsub = useWriteStore.subscribe((state, prev) => {
+			if (state.form === prev.form && state.cover === prev.cover && state.images === prev.images) return
+			if (timer) clearTimeout(timer)
+			timer = setTimeout(() => {
+				const { form, cover, images, mode, originalSlug } = useWriteStore.getState()
+				saveDraft(draftKey(mode, originalSlug), buildDraftPayload(form, cover, images))
+				setSavedAt(Date.now())
+			}, 800)
+		})
+
+		// 关闭/切换页签前立即补存，避免最后几秒输入丢失
+		const flush = () => {
+			if (timer) clearTimeout(timer)
+			const { form, cover, images, mode, originalSlug } = useWriteStore.getState()
+			saveDraft(draftKey(mode, originalSlug), buildDraftPayload(form, cover, images))
+		}
+		window.addEventListener('pagehide', flush)
+		return () => {
+			unsub()
+			window.removeEventListener('pagehide', flush)
+			if (timer) clearTimeout(timer)
+		}
+	}, [])
 
 	const insertText = (text: string) => {
 		const textarea = textareaRef.current
@@ -186,6 +217,10 @@ export function WriteEditor() {
 				onKeyDown={handleKeyDown}
 				onPaste={handlePaste}
 			/>
+			<div className='text-secondary mt-2 flex items-center justify-between px-1 text-xs opacity-70'>
+				<span>{savedAt ? `已自动保存本地草稿 ${formatDraftTime(savedAt)}` : '内容修改后会自动保存本地草稿'}</span>
+				<span>Ctrl+B 加粗 · Ctrl+I 斜体 · Ctrl+K 链接</span>
+			</div>
 		</motion.div>
 	)
 }

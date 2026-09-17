@@ -69,12 +69,17 @@ export default function LikeButton({ slug = 'site', delay, className }: LikeButt
 			const data = await res.json().catch(() => ({}))
 			if (data.reason == 'rate_limited') toast('谢谢啦😘，今天已经不能再点赞啦💕')
 			if (data.reason == 'not_configured') toast('点赞服务暂未配置，稍后再试试~')
-			const value = typeof data?.count === 'number' ? data.count : (fetchedCount ?? 0) + 1
-			await mutate(value, { revalidate: false })
+			// 只有服务端确认写入成功才更新数字，失败时回源刷新
+			if (typeof data?.count === 'number') {
+				await mutate(data.count, { revalidate: false })
+			} else if (!data.reason) {
+				toast.error('爱心没有送出去，请稍后再试试~💕')
+				await mutate()
+			}
 		} catch {
 			// ignore
 		}
-	}, [slug, fetchedCount, mutate])
+	}, [slug, mutate])
 
 	const count = typeof fetchedCount === 'number' ? fetchedCount : null
 
