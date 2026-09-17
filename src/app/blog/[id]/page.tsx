@@ -32,7 +32,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 	const title = config.title || id
 	const description = config.summary || `${title} - ${SITE_ORIGIN.replace(/^https?:\/\//, '')}`
-	const cover = config.cover ? new URL(config.cover, SITE_ORIGIN).toString() : undefined
+	// 无封面的文章回退到站点头像，保证社交分享始终有图
+	const ogImage = config.cover ? new URL(config.cover, SITE_ORIGIN).toString() : new URL('/images/avatar.png', SITE_ORIGIN).toString()
 	const publishedTime = config.date ? new Date(config.date).toISOString() : undefined
 
 	return {
@@ -45,13 +46,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 			type: 'article',
 			publishedTime,
 			tags: config.tags,
-			images: cover ? [{ url: cover }] : undefined
+			images: [{ url: ogImage }]
 		},
 		twitter: {
-			card: cover ? 'summary_large_image' : 'summary',
+			card: 'summary_large_image',
 			title,
 			description,
-			images: cover ? [cover] : undefined
+			images: [ogImage]
 		},
 		// 已下线（hidden）的文章不让搜索引擎收录
 		robots: config.hidden ? { index: false, follow: false } : undefined
