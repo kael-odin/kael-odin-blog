@@ -84,7 +84,7 @@ export function useMarkdownRender(markdown: string): MarkdownRenderResult {
 														return (
 															<div
 																key={block.placeholder}
-																className='mermaid-block my-4 overflow-x-auto rounded-xl bg-white p-4'
+																className='mermaid-block my-4 overflow-x-auto rounded-xl bg-white dark:bg-[#1c2629] p-4'
 																dangerouslySetInnerHTML={{ __html: block.preHtml }}
 															/>
 														)

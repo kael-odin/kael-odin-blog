@@ -147,14 +147,14 @@ export default function Page() {
 							whileTap={{ scale: 0.95 }}
 							onClick={handleCancel}
 							disabled={isSaving}
-							className='rounded-xl border bg-white/60 px-6 py-2 text-sm'>
+							className='rounded-xl border bg-white/60 dark:bg-white/10 px-6 py-2 text-sm'>
 							取消
 						</motion.button>
 						<motion.button
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 							onClick={openManageDialog}
-							className='rounded-xl border bg-white/60 px-6 py-2 text-sm'>
+							className='rounded-xl border bg-white/60 dark:bg-white/10 px-6 py-2 text-sm'>
 							管理
 						</motion.button>
 						<motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleSaveClick} disabled={isSaving} className='brand-btn px-6'>
@@ -167,7 +167,7 @@ export default function Page() {
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 							onClick={() => setIsEditMode(true)}
-							className='bg-card rounded-xl border px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80'>
+							className='bg-card rounded-xl border px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80 dark:hover:bg-white/15 dark:bg-white/10'>
 							编辑
 						</motion.button>
 					)
@@ -182,7 +182,7 @@ export default function Page() {
 							value={newSnippet}
 							onChange={e => setNewSnippet(e.target.value)}
 							placeholder='新增'
-							className='flex-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none'
+							className='flex-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60 px-3 py-2 text-sm focus:outline-none'
 						/>
 						<button onClick={handleAddDraft} className='brand-btn flex items-center gap-1 px-4 py-2 text-sm'>
 							<Plus className='h-4 w-4' />
@@ -195,7 +195,7 @@ export default function Page() {
 						{draftSnippets.map((item, index) => (
 							<div key={`${item}-${index}`} className='group flex items-start gap-3 rounded-lg px-3 py-2 text-sm'>
 								<p className='flex-1 leading-relaxed text-gray-800'>{item}</p>
-								<button onClick={() => handleRemoveDraft(index)} className='text-gray-400 transition-colors hover:text-red-500'>
+								<button onClick={() => handleRemoveDraft(index)} className='text-gray-400 dark:text-gray-500 transition-colors hover:text-red-500'>
 									<X className='h-4 w-4' />
 								</button>
 							</div>
@@ -205,7 +205,7 @@ export default function Page() {
 					<div className='mt-4 flex gap-3'>
 						<button
 							onClick={cancelManageChanges}
-							className='flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm transition-colors hover:bg-gray-50'>
+							className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60 dark:bg-gray-800/60'>
 							取消
 						</button>
 						<button onClick={applyManageChanges} className='brand-btn flex-1 justify-center px-4'>

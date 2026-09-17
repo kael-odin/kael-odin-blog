@@ -347,7 +347,7 @@ export default function BlogPage() {
 								onClick={() => setDisplayMode(option.value as DisplayMode)}
 								className={cn(
 									'btn-rounded px-3 py-1.5 text-xs font-medium transition-all',
-									displayMode === option.value ? 'bg-brand text-white shadow-sm' : 'text-secondary hover:text-brand hover:bg-white/60'
+									displayMode === option.value ? 'bg-brand text-white shadow-sm' : 'text-secondary hover:text-brand hover:bg-white/60 dark:hover:bg-white/15 dark:bg-white/10'
 								)}>
 								{option.label}
 							</motion.button>
@@ -385,7 +385,7 @@ export default function BlogPage() {
 													'rounded-lg border px-3 py-1 text-xs transition-colors',
 													groupAllSelected
 														? 'border-brand/40 bg-brand/10 text-brand hover:bg-brand/20'
-														: 'text-secondary hover:border-brand/40 hover:text-brand border-transparent bg-white/60 hover:bg-white/80'
+														: 'text-secondary hover:border-brand/40 hover:text-brand border-transparent bg-white/60 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/15 dark:bg-white/10'
 												)}>
 												{groupAllSelected ? '取消全选' : '全选该分组'}
 											</motion.button>
@@ -408,7 +408,7 @@ export default function BlogPage() {
 												editMode
 													? cn(
 															'rounded-lg border px-3',
-															isSelected ? 'border-brand/60 bg-brand/5' : 'hover:border-brand/40 border-transparent hover:bg-white/60'
+															isSelected ? 'border-brand/60 bg-brand/5' : 'hover:border-brand/40 border-transparent hover:bg-white/60 dark:hover:bg-white/15 dark:bg-white/10'
 														)
 													: 'cursor-pointer'
 											)}>
@@ -483,7 +483,7 @@ export default function BlogPage() {
 								whileTap={{ scale: 0.95 }}
 								onClick={() => setCategoryModalOpen(true)}
 								disabled={saving}
-								className='rounded-xl border bg-white/60 px-4 py-2 text-sm transition-colors hover:bg-white/80'>
+								className='rounded-xl border bg-white/60 dark:bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/80 dark:hover:bg-white/15 dark:bg-white/10'>
 								分类
 							</motion.button>
 						)}
@@ -492,14 +492,14 @@ export default function BlogPage() {
 							whileTap={{ scale: 0.95 }}
 							onClick={handleCancel}
 							disabled={saving}
-							className='rounded-xl border bg-white/60 px-6 py-2 text-sm'>
+							className='rounded-xl border bg-white/60 dark:bg-white/10 px-6 py-2 text-sm'>
 							取消
 						</motion.button>
 						<motion.button
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 							onClick={selectedCount === editableItems.length ? handleDeselectAll : handleSelectAll}
-							className='rounded-xl border bg-white/60 px-4 py-2 text-sm transition-colors hover:bg-white/80'>
+							className='rounded-xl border bg-white/60 dark:bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/80 dark:hover:bg-white/15 dark:bg-white/10'>
 							{selectedCount === editableItems.length ? '取消全选' : '全选'}
 						</motion.button>
 						<motion.button
@@ -507,7 +507,7 @@ export default function BlogPage() {
 							whileTap={{ scale: 0.95 }}
 							onClick={handleDeleteSelected}
 							disabled={selectedCount === 0}
-							className='rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600 transition-colors disabled:opacity-60'>
+							className='rounded-xl border border-red-200 bg-red-50 dark:bg-red-500 dark:bg-red-500/80/15 px-4 py-2 text-sm text-red-600 transition-colors disabled:opacity-60'>
 							删除(已选:{selectedCount}篇)
 						</motion.button>
 						<motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleSaveClick} disabled={saving} className='brand-btn px-6'>
@@ -520,7 +520,7 @@ export default function BlogPage() {
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 							onClick={toggleEditMode}
-							className='bg-card rounded-xl border px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80'>
+							className='bg-card rounded-xl border px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80 dark:hover:bg-white/15 dark:bg-white/10'>
 							编辑
 						</motion.button>
 					)

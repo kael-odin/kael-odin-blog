@@ -85,7 +85,7 @@ export function WriteActions() {
 				{mode === 'edit' && (
 					<>
 						<motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} className='flex items-center gap-2'>
-							<div className='rounded-lg border bg-blue-50 px-4 py-2 text-sm text-blue-700'>编辑模式</div>
+							<div className='rounded-lg border bg-blue-50 dark:bg-blue-500/15 px-4 py-2 text-sm text-blue-700'>编辑模式</div>
 						</motion.div>
 
 						<motion.button
@@ -93,7 +93,7 @@ export function WriteActions() {
 							animate={{ opacity: 1, scale: 1 }}
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
-							className='rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-100'
+							className='rounded-xl border border-red-200 bg-red-50 dark:bg-red-500 dark:bg-red-500/80/15 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-100 dark:hover:bg-red-500 dark:bg-red-500/80/25'
 							disabled={loading}
 							onClick={handleDelete}>
 							删除

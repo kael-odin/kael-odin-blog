@@ -35,7 +35,7 @@ export function ImagesSection({ delay = 0 }: ImagesSectionProps) {
 					onChange={e => setUrlInput(e.target.value)}
 				/>
 				<button
-					className='rounded-lg border bg-white/70 px-3 py-2 text-sm'
+					className='rounded-lg border bg-white/70 dark:bg-white/10 px-3 py-2 text-sm'
 					onClick={() => {
 						const v = urlInput.trim()
 						if (!v) return
@@ -87,7 +87,7 @@ export function ImagesSection({ delay = 0 }: ImagesSectionProps) {
 					return (
 						<div
 							key={item.id}
-							className={`group relative aspect-square overflow-hidden rounded-lg border bg-white/50 text-xs ${isCover ? 'ring-2 ring-blue-500' : ''}`}>
+							className={`group relative aspect-square overflow-hidden rounded-lg border bg-white/50 dark:bg-white/10 text-xs ${isCover ? 'ring-2 ring-blue-500' : ''}`}>
 							{isVideo ? (
 								<video src={src} className='h-full w-full object-cover' muted draggable onDragStart={e => {
 									e.dataTransfer.setData('text/plain', markdown)
@@ -107,7 +107,7 @@ export function ImagesSection({ delay = 0 }: ImagesSectionProps) {
 							{isVideo && <div className='absolute bottom-1 left-1 rounded-md bg-black/60 px-1.5 py-0.5 text-white shadow'>视频</div>}
 							{isCover && <div className='absolute top-1 left-1 rounded-md bg-blue-500 px-1.5 py-0.5 text-white shadow'>封面</div>}
 							<div className='absolute top-1 right-1 hidden group-hover:flex'>
-								<button type='button' className='rounded-md bg-white/80 px-1.5 py-0.5 shadow hover:bg-white' onClick={() => deleteImage(item.id)}>
+								<button type='button' className='rounded-md bg-white/80 dark:bg-white/10 px-1.5 py-0.5 shadow hover:bg-white dark:bg-[#1c2629] dark:hover:bg-white/10' onClick={() => deleteImage(item.id)}>
 									删除
 								</button>
 							</div>

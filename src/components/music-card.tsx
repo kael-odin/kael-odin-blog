@@ -183,7 +183,7 @@ export default function MusicCard() {
 						{currentTrack?.name || '未配置曲目'}
 					</div>
 
-					<div className='mt-1 h-2 rounded-full bg-white/60'>
+					<div className='mt-1 h-2 rounded-full bg-white/60 dark:bg-white/10'>
 						<div className='bg-linear h-full rounded-full transition-all duration-300' style={{ width: `${progress}%` }} />
 					</div>
 				</div>
@@ -200,7 +200,7 @@ export default function MusicCard() {
 					<button
 						onClick={togglePlayPause}
 						aria-label={isPlaying ? '暂停' : '播放'}
-						className='flex h-10 w-10 items-center justify-center rounded-full bg-white transition-opacity hover:opacity-80'>
+						className='flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-[#1c2629] transition-opacity hover:opacity-80'>
 						{isPlaying ? <Pause className='text-brand h-4 w-4' /> : <PlaySVG className='text-brand ml-1 h-4 w-4' />}
 					</button>
 				</div>

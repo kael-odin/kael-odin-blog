@@ -96,7 +96,7 @@ export default function BlogArticleView({ slug }: { slug: string }) {
 				whileHover={{ scale: 1.05 }}
 				whileTap={{ scale: 0.95 }}
 				onClick={handleEdit}
-				className='absolute top-4 right-6 rounded-xl border bg-white/60 px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80 max-sm:hidden'>
+				className='absolute top-4 right-6 rounded-xl border bg-white/60 dark:bg-white/10 px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80 dark:hover:bg-white/15 dark:bg-white/10 max-sm:hidden'>
 				编辑
 			</motion.button>
 

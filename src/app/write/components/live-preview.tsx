@@ -32,7 +32,7 @@ export function WriteLivePreview() {
 			className='bg-article sticky top-24 hidden h-[calc(100vh-9rem)] w-[320px] shrink-0 flex-col overflow-hidden rounded-[40px] border shadow 2xl:flex'>
 			<div className='flex items-center justify-between border-b px-6 py-4'>
 				<span className='text-secondary text-xs'>实时预览</span>
-				<button onClick={toggleLivePreview} className='text-secondary text-xs transition-colors hover:text-gray-600'>
+				<button onClick={toggleLivePreview} className='text-secondary text-xs transition-colors hover:text-gray-600 dark:text-gray-300 dark:text-gray-600'>
 					关闭
 				</button>
 			</div>
