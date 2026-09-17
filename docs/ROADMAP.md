@@ -43,7 +43,7 @@
 ## ✅ 2026-09-18 凌晨会话追加完成
 - **Vercel Web Analytics**：根布局挂载 `@vercel/analytics/react`，线上已验证脚本注入（生产环境控制台即可看流量）。
 - **robots.txt**：`src/app/robots.ts`，放行全站、屏蔽 /write 与 /api、指向 sitemap。
-- **next/image 渐进迁移**：艺术图/头像/文章封面缩略图/项目图标与封面已迁移（`/_next/image` 优化+srcset 生效）；文章正文图保留原生 `<img loading=lazy>`（尺寸不定，改动收益低）。
+- **next/image 渐进迁移**：艺术图/头像/文章封面缩略图/项目图标与封面/**文章正文图**均已迁移（`/_next/image` 优化+srcset，生产实测生效）；正文图带守卫——blob:/data: 源（编辑器预览）自动回退原生 img，灯箱大图保持原生；配置 `dangerouslyAllowSVG` 支持 SVG 插图。
 - **圣诞装饰暗色调校**：雪花雪点两主题保持白色（暗色下更清晰）；全局清理 14 处 dark 类双写残留。
 - **移动端文章封面**：手机端文章页顶部补显示封面（桌面仍走侧栏）。
 - **OG 图回退**：无封面文章社交分享回退为站点头像。
