@@ -1,11 +1,11 @@
-'use client'
+import type { Metadata } from 'next'
+import Client from './client'
 
-import Live2DViewer from './live2d-viewer'
+export const metadata: Metadata = {
+	title: 'Live2D',
+	description: 'Live2D 看板'
+}
 
-export default function Live2DPage() {
-	return (
-		<div className='flex h-full items-center justify-center py-8'>
-			<Live2DViewer />
-		</div>
-	)
+export default function Page() {
+	return <Client />
 }
