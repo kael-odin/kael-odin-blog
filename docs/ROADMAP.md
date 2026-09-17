@@ -41,11 +41,10 @@
 - **视频**：B站/YouTube 直接贴链接；本地视频≤80MB 从「图片管理」上传。
 
 ## 🔜 待办（按价值排序，未实施）
-1. **管理后台移动端**：文章编辑器已适配手机，但 projects/share/bloggers/pictures 的编辑工具栏仍 `max-sm:hidden`。
-2. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
-3. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
-4. 图片 next/image 迁移：全站多为原生 `<img>`（文章内图已有 lazy），迁移可进一步优化 LCP/CLS，但涉及面广。
-5. 暗色下的圣诞主题（enableChristmas）装饰色未专门调校，冬季开启前可顺手看一眼。
+1. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
+2. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
+3. 图片 next/image 迁移：全站多为原生 `<img>`（文章内图已有 lazy），迁移可进一步优化 LCP/CLS，但涉及面广。
+4. 暗色下的圣诞主题（enableChristmas）装饰色未专门调校，冬季开启前可顺手看一眼。
 
 ## 🔧 运维备忘
 - Vercel 环境变量：`NEXT_PUBLIC_GITHUB_APP_ID=3002414`、`GITHUB_APP_PRIVATE_KEY`（.pem 全文）。**改 NEXT_PUBLIC_* 后必须 Redeploy**。
