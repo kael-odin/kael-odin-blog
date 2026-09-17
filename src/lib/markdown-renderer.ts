@@ -8,6 +8,31 @@ export interface MarkdownRenderResult {
 	toc: TocItem[]
 }
 
+// Lazy load mermaid for ```mermaid diagram blocks
+let mermaidModule: any = null
+let mermaidLoadAttempted = false
+
+async function loadMermaid() {
+	if (mermaidModule) return mermaidModule
+	if (mermaidLoadAttempted) return null
+	mermaidLoadAttempted = true
+
+	try {
+		const mod: any = await import('mermaid')
+		const mermaid = mod?.default ?? mod
+		mermaid.initialize({
+			startOnLoad: false,
+			securityLevel: 'strict',
+			theme: 'neutral'
+		})
+		mermaidModule = mermaid
+		return mermaidModule
+	} catch (error) {
+		console.warn('Failed to load mermaid module:', error)
+		return null
+	}
+}
+
 export function slugify(text: string): string {
 	return text
 		.toLowerCase()
@@ -59,8 +84,8 @@ async function loadKatex() {
 export async function renderMarkdown(markdown: string): Promise<MarkdownRenderResult> {
 	// Load optional renderers first so they apply on the FIRST lex/parse pass.
 	// (If we lex before registering extensions, math tokens won't ever be produced on a cold refresh.)
-	const codeBlockMap = new Map<string, { html: string; original: string }>()
-	const [shiki, katex] = await Promise.all([loadShiki(), loadKatex()])
+	const codeBlockMap = new Map<string, { html: string; original: string; kind?: 'code' | 'mermaid' }>()
+	const [shiki, katex, mermaid] = await Promise.all([loadShiki(), loadKatex(), loadMermaid()])
 
 	// Render HTML with heading ids
 	const renderer = new marked.Renderer()
@@ -77,6 +102,10 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 			// Add data-code attribute with original code for copy functionality
 			// Escape HTML entities for attribute value
 			const escapedCode = codeData.original.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+			if (codeData.kind === 'mermaid') {
+				// Mermaid diagrams：SVG 由渲染钩子原样挂载
+				return `<pre class="mermaid-block" data-code="${escapedCode}">${codeData.html}</pre>`
+			}
 			if (codeData.html) {
 				// Shiki highlighted code
 				return `<pre data-code="${escapedCode}">${codeData.html}</pre>`
@@ -200,12 +229,29 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	}
 	extractHeadings(tokens)
 
-	// Pre-process code blocks with Shiki
+	// Pre-process code blocks with Shiki / Mermaid
 	for (const token of tokens) {
 		if (token.type === 'code') {
 			const codeToken = token as Tokens.Code
 			const originalCode = codeToken.text
 			const key = `__SHIKI_CODE_${codeBlockMap.size}__`
+
+			// ```mermaid 图表：交给 mermaid 渲染成 SVG
+			if ((codeToken.lang || '').trim().toLowerCase() === 'mermaid') {
+				if (mermaid) {
+					try {
+						const { svg } = await mermaid.render(`mermaid-svg-${codeBlockMap.size}-${Date.now()}`, originalCode)
+						codeBlockMap.set(key, { html: svg, original: originalCode, kind: 'mermaid' })
+						codeToken.text = key
+						continue
+					} catch {
+						// 渲染失败按普通代码块展示，便于排查语法错误
+					}
+				}
+				codeBlockMap.set(key, { html: '', original: originalCode })
+				codeToken.text = key
+				continue
+			}
 
 			if (shiki) {
 				try {
@@ -213,16 +259,16 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 						lang: codeToken.lang || 'text',
 						theme: 'one-light'
 					})
-					codeBlockMap.set(key, { html, original: originalCode })
+					codeBlockMap.set(key, { html, original: originalCode, kind: 'code' })
 					codeToken.text = key
 				} catch {
 					// Keep original if highlighting fails
-					codeBlockMap.set(key, { html: '', original: originalCode })
+					codeBlockMap.set(key, { html: '', original: originalCode, kind: 'code' })
 					codeToken.text = key
 				}
 			} else {
 				// Fallback when shiki is not available
-				codeBlockMap.set(key, { html: '', original: originalCode })
+				codeBlockMap.set(key, { html: '', original: originalCode, kind: 'code' })
 				codeToken.text = key
 			}
 		}

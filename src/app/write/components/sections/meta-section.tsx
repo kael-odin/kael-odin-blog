@@ -11,7 +11,6 @@ type MetaSectionProps = {
 
 export function MetaSection({ delay = 0 }: MetaSectionProps) {
 	const { form, updateForm } = useWriteStore()
-	console.log(form.date)
 
 	const { categories } = useCategories()
 	const { siteContent } = useConfigStore()

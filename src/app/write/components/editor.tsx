@@ -7,9 +7,39 @@ import { buildDraftPayload, draftKey, formatDraftTime, saveDraft } from '../serv
 
 const defaultText = 'text'
 
+/** 由标题生成 slug：拉丁字符直接用，中文转拼音（按需加载 pinyin-pro） */
+async function suggestSlug(title: string): Promise<string> {
+	const base = title
+		.toLowerCase()
+		.replace(/[^a-z0-9\u4e00-\u9fa5\s-]/g, '')
+		.trim()
+	if (!base) return ''
+	try {
+		const mod: any = await import('pinyin-pro')
+		const pinyin = mod?.pinyin ?? mod?.default?.pinyin
+		if (pinyin) {
+			const py: string[] = pinyin(base, { toneType: 'none', type: 'array', nonZh: 'consecutive' } as const)
+			return (
+				py
+					.join('-')
+					.toLowerCase()
+					.replace(/[^a-z0-9-]/g, '')
+					.replace(/-+/g, '-')
+					.replace(/^-|-$/g, '')
+					.slice(0, 60) || ''
+			)
+		}
+	} catch {
+		// 库加载失败退回拉丁字符
+	}
+	return base.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 60)
+}
+
 export function WriteEditor() {
 	const { form, updateForm, images, addFiles } = useWriteStore()
 	const { mode, originalSlug } = useWriteStore()
+	const livePreview = usePreviewStore(state => state.livePreview)
+	const toggleLivePreview = usePreviewStore(state => state.toggleLivePreview)
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
 	const [savedAt, setSavedAt] = useState<number | null>(null)
 
@@ -198,7 +228,20 @@ export function WriteEditor() {
 					placeholder='标题'
 					className='bg-card flex-1 rounded-lg border px-3 py-2 text-sm'
 					value={form.title}
-					onChange={e => updateForm({ title: e.target.value })}
+					onChange={e => {
+						const title = e.target.value
+						// 新建模式下标题为空 slug 时自动生成（拼音）
+						if (mode === 'create' && !form.slug && title.trim()) {
+							updateForm({ title })
+							suggestSlug(title).then(slug => {
+								if (slug && !useWriteStore.getState().form.slug) {
+									updateForm({ slug })
+								}
+							})
+						} else {
+							updateForm({ title })
+						}
+					}}
 				/>
 				<input
 					type='text'
@@ -207,6 +250,13 @@ export function WriteEditor() {
 					value={form.slug}
 					onChange={e => updateForm({ slug: e.target.value })}
 				/>
+				<button
+					type='button'
+					onClick={toggleLivePreview}
+					className={`hidden shrink-0 rounded-lg border px-3 py-2 text-xs transition-colors 2xl:block ${livePreview ? 'brand-btn' : 'bg-card hover:bg-bg'}`}
+					title='宽屏分屏实时预览'>
+					预览
+				</button>
 			</div>
 			<textarea
 				ref={textareaRef}

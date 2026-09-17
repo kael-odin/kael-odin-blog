@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { useWriteStore } from '../../stores/write-store'
+import { isVideoSrc } from '@/components/markdown-image'
 import Link from 'next/link'
 
 type ImagesSectionProps = {
@@ -48,7 +49,7 @@ export function ImagesSection({ delay = 0 }: ImagesSectionProps) {
 			<input
 				ref={fileInputRef}
 				type='file'
-				accept='image/*'
+				accept='image/*,video/mp4,video/webm,video/quicktime'
 				multiple
 				className='hidden'
 				onChange={e => {
@@ -81,20 +82,29 @@ export function ImagesSection({ delay = 0 }: ImagesSectionProps) {
 					const src = isUrl ? item.url : item.previewUrl
 					const markdown = isUrl ? `![](${item.url})` : `![](local-image:${item.id})`
 					const isCover = coverId === item.id
+					const isVideo = item.type === 'file' ? item.file.type.startsWith('video/') : isVideoSrc(item.url)
 
 					return (
 						<div
 							key={item.id}
 							className={`group relative aspect-square overflow-hidden rounded-lg border bg-white/50 text-xs ${isCover ? 'ring-2 ring-blue-500' : ''}`}>
-							<img
-								src={src}
-								className='h-full w-full object-cover'
-								draggable
-								onDragStart={e => {
+							{isVideo ? (
+								<video src={src} className='h-full w-full object-cover' muted draggable onDragStart={e => {
 									e.dataTransfer.setData('text/plain', markdown)
 									e.dataTransfer.setData('text/markdown', markdown)
-								}}
-							/>
+								}} />
+							) : (
+								<img
+									src={src}
+									className='h-full w-full object-cover'
+									draggable
+									onDragStart={e => {
+										e.dataTransfer.setData('text/plain', markdown)
+										e.dataTransfer.setData('text/markdown', markdown)
+									}}
+								/>
+							)}
+							{isVideo && <div className='absolute bottom-1 left-1 rounded-md bg-black/60 px-1.5 py-0.5 text-white shadow'>视频</div>}
 							{isCover && <div className='absolute top-1 left-1 rounded-md bg-blue-500 px-1.5 py-0.5 text-white shadow'>封面</div>}
 							<div className='absolute top-1 right-1 hidden group-hover:flex'>
 								<button type='button' className='rounded-md bg-white/80 px-1.5 py-0.5 shadow hover:bg-white' onClick={() => deleteImage(item.id)}>

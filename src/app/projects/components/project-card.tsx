@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { useSize } from '@/hooks/use-size'
 import ImageUploadDialog, { type ImageItem } from './image-upload-dialog'
+import { GithubStars } from './github-stars'
 
 export interface Project {
 	name: string
@@ -16,6 +17,8 @@ export interface Project {
 	tags: string[]
 	github?: string
 	npm?: string
+	/** 可选封面大图（16:9 展示在卡片顶部） */
+	cover?: string
 }
 
 interface ProjectCardProps {
@@ -91,6 +94,16 @@ export function ProjectCard({ project, isEditMode = false, onUpdate, onDelete }:
 				</div>
 			)}
 
+			{localProject.cover && (
+				<img
+					src={localProject.cover}
+					alt={localProject.name}
+					loading='lazy'
+					className={cn('aspect-video w-full rounded-2xl object-cover', canEdit && 'cursor-pointer')}
+					onClick={() => canEdit && setShowImageDialog(true)}
+				/>
+			)}
+
 			<div className='flex items-start gap-4'>
 				<div className='group relative'>
 					<img
@@ -158,6 +171,13 @@ export function ProjectCard({ project, isEditMode = false, onUpdate, onDelete }:
 					<>
 						<input
 							type='url'
+							value={localProject.cover || ''}
+							onChange={e => handleFieldChange('cover', e.target.value || undefined)}
+							placeholder='封面大图 URL（可选，16:9）'
+							className='bg-secondary/10 border-secondary/20 w-full rounded-lg border px-3 py-1.5 text-sm focus:outline-none'
+						/>
+						<input
+							type='url'
 							value={localProject.url}
 							onChange={e => handleFieldChange('url', e.target.value)}
 							placeholder='网站 URL'
@@ -178,35 +198,38 @@ export function ProjectCard({ project, isEditMode = false, onUpdate, onDelete }:
 							className='bg-secondary/10 border-secondary/20 flex-1 rounded-lg border px-3 py-1.5 text-sm focus:outline-none'
 						/>
 					</>
-				) : (
-					<>
-						<Link
-							href={localProject.url}
-							target='_blank'
-							rel='noopener noreferrer'
-							className='bg-card hover:bg-bg rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors'>
-							Website
-						</Link>
-						{localProject.github && (
+					) : (
+						<>
 							<Link
-								href={localProject.github}
+								href={localProject.url}
 								target='_blank'
 								rel='noopener noreferrer'
 								className='bg-card hover:bg-bg rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors'>
-								GitHub
+								Website
 							</Link>
-						)}
-						{localProject.npm && (
-							<Link
-								href={localProject.npm}
-								target='_blank'
-								rel='noopener noreferrer'
-								className='bg-card hover:bg-bg rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors'>
-								NPM
-							</Link>
-						)}
-					</>
-				)}
+							{localProject.github && (
+								<>
+									<Link
+										href={localProject.github}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='bg-card hover:bg-bg rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors'>
+										GitHub
+									</Link>
+									<GithubStars url={localProject.github} />
+								</>
+							)}
+							{localProject.npm && (
+								<Link
+									href={localProject.npm}
+									target='_blank'
+									rel='noopener noreferrer'
+									className='bg-card hover:bg-bg rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors'>
+									NPM
+								</Link>
+							)}
+						</>
+					)}
 			</div>
 
 			{canEdit && showImageDialog && (

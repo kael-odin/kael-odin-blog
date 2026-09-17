@@ -6,6 +6,7 @@ import { WriteEditor } from './components/editor'
 import { WriteSidebar } from './components/sidebar'
 import { WriteActions } from './components/actions'
 import { WritePreview } from './components/preview'
+import { WriteLivePreview } from './components/live-preview'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { clearDraft, draftKey, loadDraft } from './services/draft-store'
@@ -47,6 +48,7 @@ export default function WritePage() {
 			<div className='flex h-full justify-center gap-6 px-6 pt-24 pb-12'>
 				<WriteEditor />
 				<WriteSidebar />
+				<WriteLivePreview />
 			</div>
 
 			<WriteActions />

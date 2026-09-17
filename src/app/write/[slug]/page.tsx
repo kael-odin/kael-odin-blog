@@ -8,6 +8,7 @@ import { WriteEditor } from '../components/editor'
 import { WriteSidebar } from '../components/sidebar'
 import { WriteActions } from '../components/actions'
 import { WritePreview } from '../components/preview'
+import { WriteLivePreview } from '../components/live-preview'
 
 export default function EditBlogPage() {
 	const params = useParams() as { slug?: string }
@@ -34,6 +35,7 @@ export default function EditBlogPage() {
 			<div className='flex h-full justify-center gap-6 px-6 pt-24 pb-12'>
 				<WriteEditor />
 				<WriteSidebar />
+				<WriteLivePreview />
 			</div>
 
 			<WriteActions />

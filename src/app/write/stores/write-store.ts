@@ -1,12 +1,16 @@
 import { create } from 'zustand'
 import { toast } from 'sonner'
 import { hashFileSHA256 } from '@/lib/file-utils'
+import { compressImageToWebp, isCompressibleImage } from '@/lib/image-compress'
 import { loadBlog } from '@/lib/load-blog'
 import { draftKey, draftToStoreAssets, loadDraft, type DraftPayload } from '../services/draft-store'
 import type { PublishForm, ImageItem } from '../types'
 
 /** 单张图片转 dataUrl 的上限（超过则不随本地草稿持久化） */
 const DATAURL_BUDGET = 400 * 1024
+
+/** 单个视频文件上限：GitHub blob 硬限 100MB，留出 base64 余量 */
+const MAX_VIDEO_BYTES = 80 * 1024 * 1024
 
 function readAsDataUrl(file: File): Promise<string | null> {
 	return new Promise(resolve => {
@@ -97,10 +101,46 @@ export const useWriteStore = create<WriteStore>((set, get) => ({
 		const id = Math.random().toString(36).slice(2, 10)
 		set(state => ({ images: [{ id, type: 'url', url }, ...state.images] }))
 	},
+	// 单个视频文件上限：GitHub blob 硬限 100MB，留出 base64 余量
 	addFiles: async (files: FileList | File[]) => {
 		const { images } = get()
-		const arr = Array.from(files).filter(f => f.type.startsWith('image/'))
+		const rejected: string[] = []
+		const arr = Array.from(files).filter(f => {
+			if (f.type.startsWith('video/')) {
+				if (f.size > MAX_VIDEO_BYTES) {
+					rejected.push(f.name)
+					return false
+				}
+				return true
+			}
+			return f.type.startsWith('image/')
+		})
+		if (rejected.length > 0) {
+			toast.error(`以下视频超过 80MB 上限，请压缩后上传：${rejected.join('、')}`)
+		}
 		if (arr.length === 0) return []
+
+		// 自动压缩：可压缩栅格图转 WebP（超大图缩放），失败或无收益则保留原图
+		let compressedCount = 0
+		let savedBytes = 0
+		const processed = await Promise.all(
+			arr.map(async f => {
+				if (!isCompressibleImage(f)) return f
+				try {
+					const out = await compressImageToWebp(f)
+					if (out !== f) {
+						compressedCount++
+						savedBytes += f.size - out.size
+					}
+					return out
+				} catch {
+					return f
+				}
+			})
+		)
+		if (compressedCount > 0) {
+			toast.info(`已自动压缩 ${compressedCount} 张图片，节省 ${(savedBytes / 1024 / 1024).toFixed(1)} MB`)
+		}
 
 		const existingHashes = new Map<string, ImageItem>(
 			images
@@ -109,7 +149,7 @@ export const useWriteStore = create<WriteStore>((set, get) => ({
 		)
 
 		const computed = await Promise.all(
-			arr.map(async file => {
+			processed.map(async file => {
 				const hash = await hashFileSHA256(file)
 				return { file, hash }
 			})

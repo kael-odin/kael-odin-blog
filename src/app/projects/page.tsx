@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion } from 'motion/react'
 import { toast } from 'sonner'
 import { ProjectCard, type Project } from './components/project-card'
@@ -19,7 +19,11 @@ export default function Page() {
 	const [editingProject, setEditingProject] = useState<Project | null>(null)
 	const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
 	const [imageItems, setImageItems] = useState<Map<string, ImageItem>>(new Map())
+	const [activeTag, setActiveTag] = useState<string | null>(null)
 	const keyInputRef = useRef<HTMLInputElement>(null)
+
+	const allTags = useMemo(() => Array.from(new Set((initialList as Project[]).flatMap(p => p.tags || []))).sort(), [initialList])
+	const visibleProjects = useMemo(() => (activeTag ? projects.filter(p => (p.tags || []).includes(activeTag)) : projects), [projects, activeTag])
 
 	const { isAuth, setPrivateKey } = useAuthStore()
 	const { siteContent } = useConfigStore()
@@ -133,11 +137,37 @@ export default function Page() {
 			/>
 
 			<div className='flex flex-col items-center justify-center px-6 pt-32 pb-12'>
-				<div className='grid w-full max-w-[1200px] grid-cols-2 gap-6 max-md:grid-cols-1'>
-					{projects.map((project, index) => (
-						<ProjectCard key={project.url} project={project} isEditMode={isEditMode} onUpdate={handleUpdate} onDelete={() => handleDelete(project)} />
-					))}
-				</div>
+				{projects.length === 0 && !isEditMode ? (
+					<div className='py-24 text-center'>
+						<p className='text-secondary text-sm'>还没有展示的项目</p>
+						<p className='text-secondary mt-2 text-xs opacity-70'>点击右上角「编辑」→「添加」，开始搭建你的项目墙</p>
+					</div>
+				) : (
+					<>
+						{!isEditMode && allTags.length > 0 && (
+							<div className='mb-8 flex max-w-[1200px] flex-wrap items-center justify-center gap-2'>
+								<button
+									onClick={() => setActiveTag(null)}
+									className={`rounded-lg border px-3 py-1.5 text-xs transition-colors ${activeTag === null ? 'brand-btn' : 'bg-card hover:bg-bg'}`}>
+									全部
+								</button>
+								{allTags.map(tag => (
+									<button
+										key={tag}
+										onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+										className={`rounded-lg border px-3 py-1.5 text-xs transition-colors ${activeTag === tag ? 'brand-btn' : 'bg-card hover:bg-bg'}`}>
+										{tag}
+									</button>
+								))}
+							</div>
+						)}
+						<div className='grid w-full max-w-[1200px] grid-cols-2 gap-6 max-md:grid-cols-1'>
+							{visibleProjects.map((project, index) => (
+								<ProjectCard key={project.url} project={project} isEditMode={isEditMode} onUpdate={handleUpdate} onDelete={() => handleDelete(project)} />
+							))}
+						</div>
+					</>
+				)}
 			</div>
 
 			<motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} className='absolute top-4 right-6 flex gap-3 max-sm:hidden'>
