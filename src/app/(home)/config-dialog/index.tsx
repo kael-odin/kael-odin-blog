@@ -190,14 +190,16 @@ export default function ConfigDialog({ open, onClose }: ConfigDialogProps) {
 
 		const root = document.documentElement
 
-		if (colorBrand) root.style.setProperty('--color-brand', colorBrand)
-		if (colorBrandSecondary) root.style.setProperty('--color-brand-secondary', colorBrandSecondary)
-		if (colorPrimary) root.style.setProperty('--color-primary', colorPrimary)
-		if (colorSecondary) root.style.setProperty('--color-secondary', colorSecondary)
-		if (colorBg) root.style.setProperty('--color-bg', colorBg)
-		if (colorBorder) root.style.setProperty('--color-border', colorBorder)
-		if (colorCard) root.style.setProperty('--color-card', colorCard)
-		if (colorArticle) root.style.setProperty('--color-article', colorArticle)
+		// 写入浅色来源变量 --lc-*（映射见 theme.css）；直接写 --color-* 会以内联样式
+		// 压过 html[data-theme=dark] 的暗色映射，导致暗色模式失效
+		if (colorBrand) root.style.setProperty('--lc-brand', colorBrand)
+		if (colorBrandSecondary) root.style.setProperty('--lc-brand-secondary', colorBrandSecondary)
+		if (colorPrimary) root.style.setProperty('--lc-primary', colorPrimary)
+		if (colorSecondary) root.style.setProperty('--lc-secondary', colorSecondary)
+		if (colorBg) root.style.setProperty('--lc-bg', colorBg)
+		if (colorBorder) root.style.setProperty('--lc-border', colorBorder)
+		if (colorCard) root.style.setProperty('--lc-card', colorCard)
+		if (colorArticle) root.style.setProperty('--lc-article', colorArticle)
 	}
 
 	const handlePreview = () => {
