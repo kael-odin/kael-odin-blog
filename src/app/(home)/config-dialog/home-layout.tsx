@@ -61,7 +61,7 @@ export function HomeLayout({ cardStylesData, setCardStylesData, onClose }: HomeL
 			</div>
 			<table className='mt-3 w-full border-collapse text-sm whitespace-nowrap'>
 				<thead>
-					<tr className='border-b text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500'>
+					<tr className='border-b text-xs text-gray-500 dark:text-gray-400'>
 						<th className='px-3 py-2 text-left font-medium'>卡片</th>
 						<th className='px-3 py-2 text-left font-medium'>宽度</th>
 						<th className='px-3 py-2 text-left font-medium'>高度</th>

@@ -205,7 +205,7 @@ export default function Page() {
 					<div className='mt-4 flex gap-3'>
 						<button
 							onClick={cancelManageChanges}
-							className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60 dark:bg-gray-800/60'>
+							className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60'>
 							取消
 						</button>
 						<button onClick={applyManageChanges} className='brand-btn flex-1 justify-center px-4'>

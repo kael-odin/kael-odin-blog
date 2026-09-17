@@ -78,7 +78,8 @@ export default function SnowfallBackground({ zIndex, count = 125 }: { zIndex: nu
 						ease: 'linear'
 					}}>
 					{snowflake.type === 'dot' ? (
-						<div className='h-full w-full rounded-full bg-white dark:bg-[#1c2629]' />
+						// 雪点两种主题下都保持白色：浅色背景下若隐若现，暗色背景下反而更清晰
+						<div className='h-full w-full rounded-full bg-white' />
 					) : (
 						<img src={SNOWFLAKE_IMAGES[snowflake.imageIndex!]} alt='' className='h-full w-full object-contain' draggable={false} />
 					)}

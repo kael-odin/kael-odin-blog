@@ -80,7 +80,7 @@ export default function UploadDialog({ onClose, onSubmit }: UploadDialogProps) {
 							onClick={() => fileInputRef.current?.click()}
 							className='flex h-32 cursor-pointer items-center justify-center rounded-xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/60 transition-colors hover:bg-secondary/10'>
 							<div className='text-center'>
-								<Plus className='mx-auto mb-1 h-8 w-8 text-gray-500 dark:text-gray-400 dark:text-gray-500' />
+								<Plus className='mx-auto mb-1 h-8 w-8 text-gray-500 dark:text-gray-400' />
 								<p className='text-secondary text-xs'>点击选择图片</p>
 							</div>
 						</div>
@@ -109,7 +109,7 @@ export default function UploadDialog({ onClose, onSubmit }: UploadDialogProps) {
 								<button
 									type='button'
 									onClick={() => fileInputRef.current?.click()}
-									className='rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60 dark:bg-gray-800/60'>
+									className='rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60'>
 									继续添加
 								</button>
 							</div>
@@ -132,7 +132,7 @@ export default function UploadDialog({ onClose, onSubmit }: UploadDialogProps) {
 					<button
 						type='button'
 						onClick={handleClose}
-						className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60 dark:bg-gray-800/60'>
+						className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60'>
 						取消
 					</button>
 					<button type='button' onClick={handleSubmit} className='brand-btn flex-1 justify-center px-4'>

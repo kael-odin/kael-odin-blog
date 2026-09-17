@@ -109,7 +109,7 @@ export function ArtImagesSection({ formData, setFormData, artImageUploads, setAr
 		<div>
 			<label className='mb-2 block text-sm font-medium'>首页图片</label>
 			<input ref={artInputRef} type='file' accept='image/*' multiple className='hidden' onChange={handleArtFilesSelect} />
-			{(formData.artImages?.length ?? 0) === 0 && <p className='mb-2 text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500'>暂未配置 Art 图片，点击下方「+」添加。</p>}
+			{(formData.artImages?.length ?? 0) === 0 && <p className='mb-2 text-xs text-gray-500 dark:text-gray-400'>暂未配置 Art 图片，点击下方「+」添加。</p>}
 			<div className='grid grid-cols-4 gap-3 max-sm:grid-cols-3'>
 				{formData.artImages?.map(item => {
 					const isActive = formData.currentArtImageId === item.id

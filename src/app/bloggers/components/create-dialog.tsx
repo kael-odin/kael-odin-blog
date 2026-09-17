@@ -78,7 +78,7 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 							</>
 						) : (
 							<div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700'>
-								<Plus className='h-6 w-6 text-gray-500 dark:text-gray-400 dark:text-gray-500' />
+								<Plus className='h-6 w-6 text-gray-500 dark:text-gray-400' />
 							</div>
 						)}
 					</div>
@@ -122,7 +122,7 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 
 			{/* 操作按钮 */}
 			<div className='mt-6 flex gap-3'>
-				<button onClick={onClose} className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60 dark:bg-gray-800/60'>
+				<button onClick={onClose} className='flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1c2629] px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60'>
 					取消
 				</button>
 				<button onClick={handleSubmit} className='brand-btn flex-1 justify-center px-4'>

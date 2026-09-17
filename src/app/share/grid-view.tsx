@@ -63,7 +63,7 @@ export default function GridView({ shares, isEditMode = false, onUpdate, onDelet
 			</div>
 
 			{filteredShares.length === 0 && (
-				<div className='mt-12 text-center text-gray-500 dark:text-gray-400 dark:text-gray-500'>
+				<div className='mt-12 text-center text-gray-500 dark:text-gray-400'>
 					<p>没有找到相关资源</p>
 				</div>
 			)}
