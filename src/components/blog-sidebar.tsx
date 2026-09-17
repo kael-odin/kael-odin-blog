@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'motion/react'
+import Image from 'next/image'
 import { ANIMATION_DELAY, INIT_DELAY } from '@/consts'
 import LikeButton from '@/components/like-button'
 import { BlogToc } from '@/components/blog-toc'
@@ -32,7 +33,15 @@ export function BlogSidebar({ cover, summary, toc, slug }: BlogSidebarProps) {
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{ delay: INIT_DELAY + ANIMATION_DELAY * 1 }}
 					className='bg-card w-full rounded-xl border p-3'>
-					<img src={cover} alt='cover' className='h-auto w-full rounded-xl border object-cover' />
+					<Image
+						src={cover}
+						alt='cover'
+						width={400}
+						height={300}
+						sizes='200px'
+						className='h-auto w-full rounded-xl border object-cover'
+						style={{ width: '100%', height: 'auto' }}
+					/>
 				</motion.div>
 			)}
 

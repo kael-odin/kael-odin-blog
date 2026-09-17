@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
 	reactStrictMode: false,
 	reactCompiler: true,
 	pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+	images: {
+		// 站点允许用户配置外链图片（封面/头图等），放宽远程来源以启用 next/image 优化
+		remotePatterns: [{ protocol: 'https', hostname: '**' }]
+	},
 	experimental: {
 		scrollRestoration: false
 	},

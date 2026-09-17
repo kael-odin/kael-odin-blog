@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { useSize } from '@/hooks/use-size'
 import ImageUploadDialog, { type ImageItem } from './image-upload-dialog'
@@ -95,21 +96,26 @@ export function ProjectCard({ project, isEditMode = false, onUpdate, onDelete }:
 			)}
 
 			{localProject.cover && (
-				<img
-					src={localProject.cover}
-					alt={localProject.name}
-					loading='lazy'
-					className={cn('aspect-video w-full rounded-2xl object-cover', canEdit && 'cursor-pointer')}
-					onClick={() => canEdit && setShowImageDialog(true)}
-				/>
+				<div className='relative aspect-video w-full overflow-hidden rounded-2xl'>
+					<Image
+						src={localProject.cover}
+						alt={localProject.name}
+						fill
+						sizes='(max-width: 768px) 90vw, 560px'
+						className={cn('object-cover', canEdit && 'cursor-pointer')}
+						onClick={() => canEdit && setShowImageDialog(true)}
+					/>
+				</div>
 			)}
 
 			<div className='flex items-start gap-4'>
-				<div className='group relative'>
-					<img
+				<div className='group relative h-16 w-16 shrink-0'>
+					<Image
 						src={localProject.image}
 						alt={localProject.name}
-						className={cn('h-16 w-16 shrink-0 rounded-xl object-cover', canEdit && 'cursor-pointer')}
+						fill
+						sizes='64px'
+						className={cn('rounded-xl object-cover', canEdit && 'cursor-pointer')}
 						onClick={() => canEdit && setShowImageDialog(true)}
 					/>
 					{canEdit && (
