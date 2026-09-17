@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
 	reactCompiler: true,
 	pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
 	images: {
+		// AVIF 压缩率更优，不支持时自动回退 WebP
+		formats: ['image/avif', 'image/webp'],
 		// 站点允许用户配置外链图片（封面/头图等），放宽远程来源以启用 next/image 优化
 		remotePatterns: [{ protocol: 'https', hostname: '**' }],
 		// 文章可能引用 SVG 插图；attachment 头防止内联执行
