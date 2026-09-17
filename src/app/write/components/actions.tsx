@@ -93,7 +93,7 @@ export function WriteActions() {
 							animate={{ opacity: 1, scale: 1 }}
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
-							className='rounded-xl border border-red-200 bg-red-50 dark:bg-red-500 dark:bg-red-500/80/15 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-100 dark:hover:bg-red-500 dark:bg-red-500/80/25'
+							className='rounded-xl border border-red-200 bg-red-50 dark:bg-red-500/15 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-100 dark:hover:bg-red-500/25'
 							disabled={loading}
 							onClick={handleDelete}>
 							删除

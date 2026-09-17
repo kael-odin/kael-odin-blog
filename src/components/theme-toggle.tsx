@@ -39,7 +39,7 @@ export default function ThemeToggle() {
 			onClick={toggle}
 			aria-label={theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'}
 			title={theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'}
-			className='bg-card text-primary fixed bottom-5 left-5 z-50 flex h-9 w-9 items-center justify-center rounded-full border shadow backdrop-blur transition-colors hover:bg-white/60 dark:hover:bg-white/15 dark:bg-white/10 dark:hover:bg-white/10'>
+			className='bg-card text-primary fixed bottom-5 left-5 z-50 flex h-9 w-9 items-center justify-center rounded-full border shadow backdrop-blur transition-colors hover:bg-white/60 dark:hover:bg-white/15 dark:hover:bg-white/10'>
 			{theme === 'dark' ? <Sun className='h-4 w-4' /> : <Moon className='h-4 w-4' />}
 		</motion.button>
 	)

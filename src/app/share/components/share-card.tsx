@@ -71,7 +71,7 @@ export function ShareCard({ share, isEditMode = false, onUpdate, onDelete }: Sha
 				<div className='absolute top-3 right-3 z-10 flex gap-2'>
 					{isEditing ? (
 						<>
-							<button onClick={handleCancel} className='rounded-lg px-2 py-1.5 text-xs text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:text-gray-300 dark:text-gray-600'>
+							<button onClick={handleCancel} className='rounded-lg px-2 py-1.5 text-xs text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:text-gray-300'>
 								取消
 							</button>
 							<button onClick={() => setIsEditing(false)} className='rounded-lg px-2 py-1.5 text-xs text-blue-400 transition-colors hover:text-blue-600'>
@@ -169,7 +169,7 @@ export function ShareCard({ share, isEditMode = false, onUpdate, onDelete }: Sha
 						}
 					}}
 					className={cn(
-						'mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300 dark:text-gray-600 transition-all duration-300 focus:outline-none',
+						'mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300 transition-all duration-300 focus:outline-none',
 						canEdit ? 'cursor-text' : 'cursor-pointer',
 						!canEdit && (expanded ? 'line-clamp-none' : 'line-clamp-3')
 					)}>

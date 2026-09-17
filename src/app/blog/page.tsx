@@ -507,7 +507,7 @@ export default function BlogPage() {
 							whileTap={{ scale: 0.95 }}
 							onClick={handleDeleteSelected}
 							disabled={selectedCount === 0}
-							className='rounded-xl border border-red-200 bg-red-50 dark:bg-red-500 dark:bg-red-500/80/15 px-4 py-2 text-sm text-red-600 transition-colors disabled:opacity-60'>
+							className='rounded-xl border border-red-200 bg-red-50 dark:bg-red-500/15 px-4 py-2 text-sm text-red-600 transition-colors disabled:opacity-60'>
 							删除(已选:{selectedCount}篇)
 						</motion.button>
 						<motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleSaveClick} disabled={saving} className='brand-btn px-6'>

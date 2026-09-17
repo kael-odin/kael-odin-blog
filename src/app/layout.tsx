@@ -24,17 +24,43 @@ export const metadata: Metadata = {
 	}
 }
 
-const htmlStyle = {
-	cursor: 'url(/images/cursor.svg) 2 1, auto',
-	'--color-brand': theme.colorBrand,
-	'--color-primary': theme.colorPrimary,
-	'--color-secondary': theme.colorSecondary,
-	'--color-brand-secondary': theme.colorBrandSecondary,
-	'--color-bg': theme.colorBg,
-	'--color-border': theme.colorBorder,
-	'--color-card': theme.colorCard,
-	'--color-article': theme.colorArticle
+// 暗色定值调色板：保持品牌青绿不变，翻转中性色（对应 theme.css 的 --dk-*）
+const darkPalette = {
+	'--dk-primary': '#d8e4e5',
+	'--dk-secondary': '#90a1a7',
+	'--dk-brand-secondary': '#1fc9e7',
+	'--dk-bg': '#0f1719',
+	'--dk-border': '#2c3a3e',
+	'--dk-brand': '#35bfab',
+	'--dk-card': '#ffffff14',
+	'--dk-article': '#182426f2'
 }
+
+const htmlStyle: React.CSSProperties = {
+	cursor: 'url(/images/cursor.svg) 2 1, auto',
+	'--lc-brand': theme.colorBrand,
+	'--lc-primary': theme.colorPrimary,
+	'--lc-secondary': theme.colorSecondary,
+	'--lc-brand-secondary': theme.colorBrandSecondary,
+	'--lc-bg': theme.colorBg,
+	'--lc-border': theme.colorBorder,
+	'--lc-card': theme.colorCard,
+	'--lc-article': theme.colorArticle,
+	...darkPalette
+} as React.CSSProperties
+
+// 首帧前恢复上次选择的主题，避免暗色用户看到浅色闪烁
+const themeInitScript = `
+try {
+	if (localStorage.getItem('kael-blog-theme') === 'dark') {
+		document.documentElement.dataset.theme = 'dark';
+	}
+} catch (e) {}
+
+if (/windows|win32/i.test(navigator.userAgent)) {
+	document.documentElement.classList.add('windows');
+}
+`
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
@@ -42,15 +68,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 			<Head />
 
 			<body>
-				<script
-					dangerouslySetInnerHTML={{
-						__html: `
-					if (/windows|win32/i.test(navigator.userAgent)) {
-						document.documentElement.classList.add('windows');
-					}
-		      `
-					}}
-				/>
+				<script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
 
 				<Layout>{children}</Layout>
 			</body>

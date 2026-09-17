@@ -264,17 +264,17 @@ export function SocialButtonsSection({ formData, setFormData, socialButtonImageU
 								type='button'
 								onClick={() => handleMoveButton(button.id, 'up')}
 								disabled={index === 0}
-								className='rounded px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 dark:bg-gray-800 disabled:cursor-not-allowed disabled:text-gray-300 dark:text-gray-600'>
+								className='rounded px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 dark:bg-gray-800 disabled:cursor-not-allowed disabled:text-gray-300'>
 								↑
 							</button>
 							<button
 								type='button'
 								onClick={() => handleMoveButton(button.id, 'down')}
 								disabled={index === sortedButtons.length - 1}
-								className='rounded px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 dark:bg-gray-800 disabled:cursor-not-allowed disabled:text-gray-300 dark:text-gray-600'>
+								className='rounded px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 dark:bg-gray-800 disabled:cursor-not-allowed disabled:text-gray-300'>
 								↓
 							</button>
-							<button type='button' onClick={() => handleRemoveButton(button.id)} className='rounded px-2 py-1 text-xs text-red-500 hover:bg-red-50 dark:bg-red-500 dark:bg-red-500/80/15'>
+							<button type='button' onClick={() => handleRemoveButton(button.id)} className='rounded px-2 py-1 text-xs text-red-500 hover:bg-red-50 dark:bg-red-500/15'>
 								删除
 							</button>
 						</div>

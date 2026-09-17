@@ -257,7 +257,8 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 				try {
 					const html = await shiki.codeToHtml(originalCode, {
 						lang: codeToken.lang || 'text',
-						theme: 'one-light'
+						themes: { light: 'one-light', dark: 'one-dark-pro' },
+						defaultColor: 'light'
 					})
 					codeBlockMap.set(key, { html, original: originalCode, kind: 'code' })
 					codeToken.text = key

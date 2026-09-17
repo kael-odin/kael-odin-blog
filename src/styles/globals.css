@@ -5,6 +5,9 @@
 
 @plugin 'tailwindcss-animate';
 
+/* 暗色模式：由 <html data-theme="dark"> 驱动（见 theme-toggle.tsx） */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @utility scrollbar-none {
 	scrollbar-width: none;
 	&::-webkit-scrollbar {
@@ -88,6 +91,26 @@
 	html li[data-sonner-toast][data-styled='true'] {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
 		@apply bg-white/40! backdrop-blur;
+	}
+
+	html[data-theme='dark'] li[data-sonner-toast][data-styled='true'] {
+		@apply bg-[#1c2629f2]! text-primary;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+	}
+
+	/* 暗色模式下的代码块（shiki 双主题由内联 CSS 变量切换） */
+	html[data-theme='dark'] .shiki,
+	html[data-theme='dark'] .shiki span {
+		color: var(--shiki-dark) !important;
+		background-color: var(--shiki-dark-bg) !important;
+		font-style: var(--shiki-dark-font-style) !important;
+		font-weight: var(--shiki-dark-font-weight) !important;
+		text-decoration: var(--shiki-dark-text-decoration) !important;
+	}
+
+	/* 暗色模式下压暗站点背景插画 */
+	html[data-theme='dark'] .site-background-layer img {
+		filter: brightness(0.32) saturate(0.85);
 	}
 }
 

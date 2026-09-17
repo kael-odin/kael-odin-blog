@@ -118,7 +118,7 @@ export default function LikeButton({ slug = 'site', delay, className }: LikeButt
 						animate={{ scale: 1 }}
 						className={cn(
 							'absolute -top-2 left-9 min-w-6 rounded-full px-1.5 py-1 text-center text-xs text-white tabular-nums',
-							liked ? 'bg-rose-400' : 'bg-gray-300'
+							liked ? 'bg-rose-400' : 'bg-gray-300 dark:bg-gray-600'
 						)}>
 						{count}
 					</motion.span>

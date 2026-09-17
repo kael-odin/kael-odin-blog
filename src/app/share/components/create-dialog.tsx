@@ -134,7 +134,7 @@ export default function CreateDialog({ share, onClose, onSave }: CreateDialogPro
 					/>
 					<div className='mt-2 flex flex-wrap gap-1.5'>
 						{formData.tags.map(tag => (
-							<span key={tag} className='rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-300 dark:text-gray-600'>
+							<span key={tag} className='rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-300'>
 								{tag}
 							</span>
 						))}
