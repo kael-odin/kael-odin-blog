@@ -57,6 +57,8 @@ export default function MusicCard() {
 	useEffect(() => {
 		if (!audioRef.current) {
 			audioRef.current = new Audio()
+			// 4.9MB 音频不在页面加载时预取，首次播放才加载
+			audioRef.current.preload = 'none'
 		}
 
 		const audio = audioRef.current
@@ -107,15 +109,21 @@ export default function MusicCard() {
 	useEffect(() => {
 		currentIndexRef.current = currentIndex
 		if (audioRef.current) {
-			const wasPlaying = !audioRef.current.paused
-			audioRef.current.pause()
-			audioRef.current.src = MUSIC_FILES[currentIndex]?.url || ''
-			audioRef.current.loop = false
-			setProgress(0)
-
-			if (wasPlaying) {
-				audioRef.current.play().catch(console.error)
+			const audio = audioRef.current
+			const wasPlaying = !audio.paused
+			audio.pause()
+			// 懒加载：记下目标曲目，正在播放时才真正装载
+			const url = MUSIC_FILES[currentIndex]?.url || ''
+			if (audio.dataset.track !== url) {
+				audio.dataset.track = url
+				if (wasPlaying) {
+					audio.src = url
+					audio.loop = false
+					audio.play().catch(console.error)
+				}
 			}
+			audio.loop = false
+			setProgress(0)
 		}
 	}, [currentIndex])
 
@@ -124,7 +132,14 @@ export default function MusicCard() {
 		if (!audioRef.current) return
 
 		if (isPlaying) {
-			audioRef.current.play().catch(console.error)
+			const audio = audioRef.current
+			// 首次播放（或换曲后）再装载音频源
+			const url = MUSIC_FILES[currentIndexRef.current]?.url || ''
+			if (audio.dataset.track !== url) {
+				audio.dataset.track = url
+				audio.src = url
+			}
+			audio.play().catch(console.error)
 		} else {
 			audioRef.current.pause()
 		}

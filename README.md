@@ -11,16 +11,30 @@ Content (posts, site config, images, etc.) is managed visually in the browser vi
 
 > Template inspired by [`YYsuni/2025-blog-public`](https://github.com/YYsuni/2025-blog-public) and adapted for my own use.
 
+> 改进记录与后续计划见 [`docs/ROADMAP.md`](docs/ROADMAP.md)。
+
 ---
 
 ## 特性 Features
 
 - **前端可视化内容管理 Visual content editing**
-  - 在浏览器中写 Markdown 文章、上传封面和插图
+  - 在浏览器中写 Markdown 文章、上传封面和插图（拖拽/粘贴插图，自动压缩为 WebP）
+  - 本地草稿自动保存，刷新不丢稿；slug 自动生成（中文转拼音）
   - 通过 GitHub App 自动提交到仓库（无需单独登录后台）
 - **完全由 Git 仓库驱动 Git-based content**
   - 文章保存在 `public/blogs/*`，支持版本管理和回滚
   - 站点配置与布局保存在 `src/config/*`
+  - 文章支持「隐藏（下线）」：列表、RSS、sitemap、直链全链路屏蔽
+- **富内容渲染 Rich rendering**
+  - GFM 表格/任务列表、KaTeX 数学公式、Mermaid 图表（跟随明暗主题）
+  - B站 / YouTube 链接自动转嵌入播放器，支持本地上传 mp4/webm
+  - 代码高亮（shiki 明暗双主题）+ 一键复制，正文 HTML 经 DOMPurify 消毒
+- **明暗双主题 Dark mode**
+  - 左下角一键切换、记忆偏好；站点配置的浅色主题色完全保留
+- **实用小件 Handy bits**
+  - 点赞（服务端计数存仓库 `likes.json`，实时读数、IP 限频）
+  - 每日一签、七段码时钟、Live2D 小狗、音乐歌单（`src/config/playlist.json`）
+  - 图片压缩工具、SVG 图标库页；文章页 SEO（OG 图/关键词/robots）与 RSS、sitemap
 - **现代前端技术栈 Modern stack**
   - Next.js 16、React 19、TypeScript、Tailwind CSS 4
   - 动效和交互细节友好，适配桌面与移动端
