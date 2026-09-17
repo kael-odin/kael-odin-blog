@@ -8,7 +8,10 @@ const nextConfig: NextConfig = {
 	pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
 	images: {
 		// 站点允许用户配置外链图片（封面/头图等），放宽远程来源以启用 next/image 优化
-		remotePatterns: [{ protocol: 'https', hostname: '**' }]
+		remotePatterns: [{ protocol: 'https', hostname: '**' }],
+		// 文章可能引用 SVG 插图；attachment 头防止内联执行
+		dangerouslyAllowSVG: true,
+		contentDispositionType: 'attachment'
 	},
 	experimental: {
 		scrollRestoration: false
