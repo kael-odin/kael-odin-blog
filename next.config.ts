@@ -6,9 +6,6 @@ const nextConfig: NextConfig = {
 	reactStrictMode: false,
 	reactCompiler: true,
 	pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-	typescript: {
-		ignoreBuildErrors: true
-	},
 	experimental: {
 		scrollRestoration: false
 	},

@@ -13,6 +13,8 @@
 | 修 bug | 照片页删除按钮缺 `group` 类永远不可见；首页拖拽布局「保存」现在真实提交 card-styles.json（含密钥引导）；meta-section console.log | 构建通过 |
 | 点赞实时化 | GET 读数改走 Contents API（installation token 内存缓存 45min），消除 raw CDN 5 分钟延迟；前端失败不再假 +1 | 线上实测：POST 后立即 GET=1 ✅ |
 | 文章页 SEO | `/blog/[id]` 改服务端包裹 + `generateMetadata`：文章级 title/description/OG 图/发布时间/keywords | 线上实测：og:title ✅ |
+| 旧图回收 | 编辑文章时自动对比新内容引用与文章目录现存文件，同一次提交删除不再被引用的旧图片 | 构建通过 |
+| 类型安全 | 关闭 `typescript.ignoreBuildErrors`，类型错误从此阻断部署（当前基线 0 错误） | `pnpm build` 通过 |
 
 ### P1 — 内容能力
 | 项 | 说明 |
@@ -38,10 +40,9 @@
 ## 🔜 待办（按价值排序，未实施）
 1. **暗色模式全站化**：工程量大（全站浅色主题 + 12 张卡片配色基于 CSS 变量，需成对设计暗色 token + shiki 双主题）。本次只做了基础设施（代码块仍 one-light 单主题）。
 2. **移动端编辑**：所有编辑工具栏 `max-sm:hidden`，手机端建议至少开放文章编辑器。
-3. **编辑旧图回收**：编辑文章换图后旧图片文件仍留在仓库，可在 push-blog 时对比新旧 md 引用并删除孤儿文件。
-4. **`typescript.ignoreBuildErrors` 关闭**：当前 tsc 基线为 0 错误，可以关掉以保住这条基线（本次未动，避免部署风险）。
-5. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
-6. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
+3. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
+4. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
+5. 图片 next/image 迁移：全站多为原生 `<img>`（文章内图已有 lazy），迁移可进一步优化 LCP/CLS，但涉及面广。
 
 ## 🔧 运维备忘
 - Vercel 环境变量：`NEXT_PUBLIC_GITHUB_APP_ID=3002414`、`GITHUB_APP_PRIVATE_KEY`（.pem 全文）。**改 NEXT_PUBLIC_* 后必须 Redeploy**。

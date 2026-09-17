@@ -1,4 +1,4 @@
-import { toBase64Utf8, getRef, createTree, createCommit, updateRef, createBlob, readTextFileFromRepo, type TreeItem } from '@/lib/github-client'
+import { toBase64Utf8, getRef, createTree, createCommit, updateRef, createBlob, readTextFileFromRepo, listRepoFilesRecursive, type TreeItem } from '@/lib/github-client'
 import { fileToBase64NoPrefix, hashFileSHA256 } from '@/lib/file-utils'
 import { prepareBlogsIndex } from '@/lib/blog-index'
 import { getAuthToken } from '@/lib/auth'
@@ -123,6 +123,31 @@ export async function pushBlog(params: PushBlogParams): Promise<void> {
 	// handle external cover URL
 	if (cover?.type === 'url') {
 		coverPath = cover.url
+	}
+
+	// 编辑模式：回收文章目录下已不被新内容引用的旧图片，避免仓库积累孤儿文件
+	if (mode === 'edit' && originalSlug) {
+		try {
+			toast.info('正在检查旧图片引用...')
+			const newRefs = new Set<string>()
+			const collect = (text?: string | null) => {
+				if (!text) return
+				for (const m of text.matchAll(new RegExp(`/blogs/${form.slug}/[A-Za-z0-9._-]+`, 'g'))) newRefs.add(m[0])
+			}
+			collect(mdToUpload)
+			if (coverPath) newRefs.add(coverPath)
+
+			const existing = await listRepoFilesRecursive(token, GITHUB_CONFIG.OWNER, GITHUB_CONFIG.REPO, basePath, latestCommitSha)
+			for (const p of existing) {
+				if (p.endsWith('/index.md') || p.endsWith('/config.json')) continue
+				if (!newRefs.has(`/${p}`)) {
+					treeItems.push({ path: p, mode: '100644', type: 'blob', sha: null })
+				}
+			}
+		} catch (err) {
+			// 清理失败不阻塞发布
+			console.warn('orphan image cleanup skipped:', err)
+		}
 	}
 
 	toast.info('正在创建文件...')
