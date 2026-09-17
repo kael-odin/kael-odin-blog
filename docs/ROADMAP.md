@@ -40,11 +40,17 @@
 - **开评论**：见上 giscus 三步。
 - **视频**：B站/YouTube 直接贴链接；本地视频≤80MB 从「图片管理」上传。
 
+## ✅ 2026-09-18 凌晨会话追加完成
+- **Vercel Web Analytics**：根布局挂载 `@vercel/analytics/react`，线上已验证脚本注入（生产环境控制台即可看流量）。
+- **robots.txt**：`src/app/robots.ts`，放行全站、屏蔽 /write 与 /api、指向 sitemap。
+- **next/image 渐进迁移**：艺术图/头像/文章封面缩略图/项目图标与封面已迁移（`/_next/image` 优化+srcset 生效）；文章正文图保留原生 `<img loading=lazy>`（尺寸不定，改动收益低）。
+- **圣诞装饰暗色调校**：雪花雪点两主题保持白色（暗色下更清晰）；全局清理 14 处 dark 类双写残留。
+- **移动端文章封面**：手机端文章页顶部补显示封面（桌面仍走侧栏）。
+- **OG 图回退**：无封面文章社交分享回退为站点头像。
+- **窄屏溢出保护**：Markdown 表格与 KaTeX 块级公式可横向滚动。
+
 ## 🔜 待办（按价值排序，未实施）
-1. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容。
-2. 访问统计：如需可加自托管 umami 或 Vercel Analytics。
-3. 图片 next/image 迁移：全站多为原生 `<img>`（文章内图已有 lazy），迁移可进一步优化 LCP/CLS，但涉及面广。
-4. 暗色下的圣诞主题（enableChristmas）装饰色未专门调校，冬季开启前可顺手看一眼。
+1. **hidden 的强保护**：内容文件仍以静态资源存在，拿到直链仍可读（架构限制）；若需强保护需改为服务端鉴权 API 出内容——涉及内容加载架构重设计，建议单独规划。
 
 ## 🔧 运维备忘
 - Vercel 环境变量：`NEXT_PUBLIC_GITHUB_APP_ID=3002414`、`GITHUB_APP_PRIVATE_KEY`（.pem 全文）。**改 NEXT_PUBLIC_* 后必须 Redeploy**。
