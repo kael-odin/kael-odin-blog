@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import BlogArticleView from './article-view'
 
-const SITE_ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || 'https://kael-odin-blog.vercel.app'
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || 'https://odin-saga.vercel.app'
 
 type BlogMetaConfig = {
 	title?: string
