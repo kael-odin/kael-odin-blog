@@ -134,7 +134,7 @@ pnpm start
 然后在 App 的 **Install App** 页面：
 
 1. 选择 **Only select repositories**
-2. 只勾选本仓库（例：`ordin-thordata/kael-odin-blog`）
+2. 只勾选本仓库（例：`kael-odin/odin-saga`）
 
 ### 2. 配置环境变量 Environment Variables
 
@@ -142,7 +142,7 @@ pnpm start
 
 ```bash
 NEXT_PUBLIC_GITHUB_OWNER=ordin-thordata
-NEXT_PUBLIC_GITHUB_REPO=kael-odin-blog
+NEXT_PUBLIC_GITHUB_REPO=odin-saga
 NEXT_PUBLIC_GITHUB_BRANCH=main
 NEXT_PUBLIC_GITHUB_APP_ID=<你的 GitHub App ID>
 NEXT_PUBLIC_GITHUB_ENCRYPT_KEY=<任意一串较长的加密密钥>
@@ -166,7 +166,7 @@ NEXT_PUBLIC_GITHUB_ENCRYPT_KEY=<任意一串较长的加密密钥>
 
 以 Vercel 为例的部署流程：
 
-1. 将本仓库推送到 GitHub（例如 `ordin-thordata/kael-odin-blog`）
+1. 将本仓库推送到 GitHub（例如 `kael-odin/odin-saga`）
 2. 登录 Vercel，点击 **Add New -> Project**
 3. 在 GitHub 仓库列表中选择本项目，点击 **Import**
 4. 保持构建配置为 Next.js 默认即可（Framework: Next.js）

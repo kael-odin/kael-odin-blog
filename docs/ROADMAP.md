@@ -1,4 +1,4 @@
-# kael-odin-blog 改进路线图
+# odin-saga 改进路线图
 
 > 2026-09-18 凌晨自主改进会话产出。基础：fork 自 YYsuni/2025-blog-public 的 Next.js 博客，Vercel 部署，GitHub App 网页端编辑内容回写仓库。
 

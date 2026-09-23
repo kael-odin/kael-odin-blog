@@ -9,7 +9,7 @@ export const BLOG_SLUG_KEY = process.env.BLOG_SLUG_KEY || ''
  */
 export const GITHUB_CONFIG = {
 	OWNER: process.env.NEXT_PUBLIC_GITHUB_OWNER || 'kael-odin',
-	REPO: process.env.NEXT_PUBLIC_GITHUB_REPO || 'kael-odin-blog',
+	REPO: process.env.NEXT_PUBLIC_GITHUB_REPO || 'odin-saga',
 	BRANCH: process.env.NEXT_PUBLIC_GITHUB_BRANCH || 'main',
 	APP_ID: process.env.NEXT_PUBLIC_GITHUB_APP_ID || '-',
 	ENCRYPT_KEY: process.env.NEXT_PUBLIC_GITHUB_ENCRYPT_KEY || 'wudishiduomejimo',
