@@ -31,6 +31,16 @@ export function getFileExt(filename: string): string {
 	return '.png'
 }
 
+// 视频扩展名白名单：上传 mp4 等视频时保留真实扩展名，
+// 否则会被改成 .png，前端靠扩展名判定 <video> 的逻辑就断了
+export function getMediaExt(filename: string): string {
+	const lower = filename.toLowerCase()
+	for (const ext of ['.mp4', '.webm', '.ogv', '.mov', '.m4v']) {
+		if (lower.endsWith(ext)) return ext
+	}
+	return getFileExt(filename)
+}
+
 export function rand(a: number, b: number) {
 	return a + Math.random() * (b - a)
 }

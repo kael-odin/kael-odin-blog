@@ -5,11 +5,9 @@ import type { BlogIndexItem } from '@/app/blog/types'
 export const dynamic = 'force-static'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	// 域名配置：
-	// 1. 优先使用 SITE_URL (你在 Vercel 手动设置的正式域名)
-	// 2. 其次尝试 VERCEL_URL (Vercel 自动生成的预览域名，通常不带 https://)
-	// 3. 最后回退到本地开发地址
-	const baseUrl = process.env.SITE_URL ? process.env.SITE_URL : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+	// 域名配置：统一使用 NEXT_PUBLIC_SITE_URL（与 robots.ts / rss.xml 一致）。
+	// 之前回退 VERCEL_URL 会把「部署 hash 域名」烤进 sitemap 产物。
+	const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://odin-saga.vercel.app').replace(/\/$/, '')
 
 
 	// hidden 文章不进 sitemap，避免被搜索引擎收录

@@ -1,5 +1,17 @@
-import { marked } from 'marked'
+import { Marked, Renderer } from 'marked'
 import type { Tokens } from 'marked'
+
+function escapeHtml(text: string): string {
+	return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+// 递归收集所有层级的 code token（引用块/列表里嵌套的代码块默认遍历不到）
+function collectCodeTokens(list: any[], out: Tokens.Code[]): void {
+	for (const token of list) {
+		if (token.type === 'code') out.push(token as Tokens.Code)
+		if (Array.isArray(token.tokens) && token.tokens.length) collectCodeTokens(token.tokens, out)
+	}
+}
 
 export type TocItem = { id: string; text: string; level: number }
 
@@ -88,8 +100,12 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	const codeBlockMap = new Map<string, { html: string; original: string; kind?: 'code' | 'mermaid' }>()
 	const [shiki, katex, mermaid] = await Promise.all([loadShiki(), loadKatex(), loadMermaid()])
 
+	// 每次调用都用独立实例：marked.use 会把 tokenizer 永久追加到全局实例，
+	// 在实时预览等高频路径下会无限累积（内存泄漏 + 二次方减速）。
+	const instance = new Marked()
+
 	// Render HTML with heading ids
-	const renderer = new marked.Renderer()
+	const renderer = new Renderer()
 
 	renderer.heading = (token: Tokens.Heading) => {
 		const id = slugify(token.text || '')
@@ -112,10 +128,10 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 				return `<pre data-code="${escapedCode}">${codeData.html}</pre>`
 			}
 			// Fallback for failed highlighting
-			return `<pre data-code="${escapedCode}"><code>${codeData.original}</code></pre>`
+			return `<pre data-code="${escapedCode}"><code>${escapeHtml(codeData.original)}</code></pre>`
 		}
 		// Fallback to default (inline code, not code block)
-		return `<code>${token.text}</code>`
+		return `<code>${escapeHtml(token.text)}</code>`
 	}
 
 	renderer.listitem = (token: Tokens.ListItem) => {
@@ -124,7 +140,7 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 		let tokens = token.tokens
 
 		if (token.task) tokens = tokens.slice(1)
-		inner = marked.parser(tokens) as string
+		inner = instance.parser(tokens) as string
 
 		if (token.task) {
 			const checkbox = token.checked ? '<input type="checkbox" checked disabled />' : '<input type="checkbox" disabled />'
@@ -153,7 +169,7 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	}
 
 	// Register extensions BEFORE lexing so math gets tokenized on cold refresh.
-	marked.use({
+	instance.use({
 		renderer,
 		extensions: [
 			// Block math: $$ ... $$
@@ -210,7 +226,7 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	})
 
 	// Pre-process with marked lexer first (after extensions are registered)
-	const tokens = marked.lexer(markdown)
+	const tokens = instance.lexer(markdown)
 
 	// Extract TOC from parsed tokens (this correctly skips code blocks)
 	const toc: TocItem[] = []
@@ -230,52 +246,51 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	}
 	extractHeadings(tokens)
 
-	// Pre-process code blocks with Shiki / Mermaid
-	for (const token of tokens) {
-		if (token.type === 'code') {
-			const codeToken = token as Tokens.Code
-			const originalCode = codeToken.text
-			const key = `__SHIKI_CODE_${codeBlockMap.size}__`
+	// Pre-process code blocks with Shiki / Mermaid (all nesting levels)
+	const codeTokens: Tokens.Code[] = []
+	collectCodeTokens(tokens as any[], codeTokens)
+	for (const codeToken of codeTokens) {
+		const originalCode = codeToken.text
+		const key = `__SHIKI_CODE_${codeBlockMap.size}__`
 
-			// ```mermaid 图表：交给 mermaid 渲染成 SVG
-			if ((codeToken.lang || '').trim().toLowerCase() === 'mermaid') {
-				if (mermaid) {
-					try {
-						const { svg } = await mermaid.render(`mermaid-svg-${codeBlockMap.size}-${Date.now()}`, originalCode)
-						codeBlockMap.set(key, { html: svg, original: originalCode, kind: 'mermaid' })
-						codeToken.text = key
-						continue
-					} catch {
-						// 渲染失败按普通代码块展示，便于排查语法错误
-					}
-				}
-				codeBlockMap.set(key, { html: '', original: originalCode })
-				codeToken.text = key
-				continue
-			}
-
-			if (shiki) {
+		// ```mermaid 图表：交给 mermaid 渲染成 SVG
+		if ((codeToken.lang || '').trim().toLowerCase() === 'mermaid') {
+			if (mermaid) {
 				try {
-					const html = await shiki.codeToHtml(originalCode, {
-						lang: codeToken.lang || 'text',
-						themes: { light: 'one-light', dark: 'one-dark-pro' },
-						defaultColor: 'light'
-					})
-					codeBlockMap.set(key, { html, original: originalCode, kind: 'code' })
+					const { svg } = await mermaid.render(`mermaid-svg-${codeBlockMap.size}-${Date.now()}`, originalCode)
+					codeBlockMap.set(key, { html: svg, original: originalCode, kind: 'mermaid' })
 					codeToken.text = key
+					continue
 				} catch {
-					// Keep original if highlighting fails
-					codeBlockMap.set(key, { html: '', original: originalCode, kind: 'code' })
-					codeToken.text = key
+					// 渲染失败按普通代码块展示，便于排查语法错误
 				}
-			} else {
-				// Fallback when shiki is not available
+			}
+			codeBlockMap.set(key, { html: '', original: originalCode })
+			codeToken.text = key
+			continue
+		}
+
+		if (shiki) {
+			try {
+				const html = await shiki.codeToHtml(originalCode, {
+					lang: codeToken.lang || 'text',
+					themes: { light: 'one-light', dark: 'one-dark-pro' },
+					defaultColor: 'light'
+				})
+				codeBlockMap.set(key, { html, original: originalCode, kind: 'code' })
+				codeToken.text = key
+			} catch {
+				// Keep original if highlighting fails
 				codeBlockMap.set(key, { html: '', original: originalCode, kind: 'code' })
 				codeToken.text = key
 			}
+		} else {
+			// Fallback when shiki is not available
+			codeBlockMap.set(key, { html: '', original: originalCode, kind: 'code' })
+			codeToken.text = key
 		}
 	}
-	const html = (marked.parser(tokens) as string) || ''
+	const html = (instance.parser(tokens) as string) || ''
 
 	return { html, toc }
 }

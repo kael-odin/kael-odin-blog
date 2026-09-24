@@ -23,7 +23,8 @@ export function useBlogIndex() {
 		revalidateOnReconnect: true
 	})
 
-	let result = data || []
+	// 复制一层数组：调用方（如 useLatestBlog）会排序，不能原地改 SWR 缓存
+	let result = data ? [...data] : []
 	if (!isAuth) {
 		result = result.filter(item => !item.hidden)
 	}
@@ -38,7 +39,7 @@ export function useBlogIndex() {
 export function useLatestBlog() {
 	const { items, loading, error } = useBlogIndex()
 
-	const latestBlog = items.length > 0 ? items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] : null
+	const latestBlog = items.length > 0 ? [...items].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] : null
 
 	return {
 		blog: latestBlog,

@@ -4,7 +4,7 @@ import { prepareBlogsIndex } from '@/lib/blog-index'
 import { getAuthToken } from '@/lib/auth'
 import { GITHUB_CONFIG } from '@/consts'
 import type { ImageItem } from '../types'
-import { getFileExt } from '@/lib/utils'
+import { getFileExt, getMediaExt } from '@/lib/utils'
 import { toast } from 'sonner'
 import { formatDateTimeLocal } from '../stores/write-store'
 
@@ -91,7 +91,8 @@ export async function pushBlog(params: PushBlogParams): Promise<void> {
 		toast.info('正在上传图片...')
 		for (const { img, id } of allLocalImages) {
 			const hash = img.hash || (await hashFileSHA256(img.file))
-			const ext = getFileExt(img.file.name)
+			// 视频保留真实扩展名，否则 MarkdownImage 的 <video> 判定（按扩展名）会失效
+			const ext = img.file.type.startsWith('video/') ? getMediaExt(img.file.name) : getFileExt(img.file.name)
 			const filename = `${hash}${ext}`
 			const publicPath = `/blogs/${form.slug}/${filename}`
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import BlogArticleView from './article-view'
@@ -61,5 +62,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
+	// config 读不到说明文章不存在：返回真实 404，而不是 200 + 客户端空壳（软 404）
+	const config = await readBlogConfig(id)
+	if (!config) notFound()
 	return <BlogArticleView slug={id} />
 }
