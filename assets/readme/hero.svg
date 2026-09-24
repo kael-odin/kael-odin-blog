@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="t d">
+  <title id="t">ODIN SAGA</title>
+  <desc id="d">Odin 系列 SAGA —— 萨迦 · 博客与数字花园，浏览器写作、Git 存档</desc>
+  <rect width="1200" height="320" rx="26" fill="#0B0F1A"/>
+  <g transform="translate(56 54)">
+    <rect width="36" height="36" rx="9" fill="#2DD4BF" fill-opacity="0.13" stroke="#2DD4BF" stroke-opacity="0.55"/>
+    <path d="M15,3 L8,9.5 L16,14 L9,21" transform="translate(6 6)" fill="none" stroke="#2DD4BF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="104" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, &quot;Consolas&quot;, monospace" font-size="17" letter-spacing="2.5" fill="#8B9BB4">ODIN SERIES · 04 / 05 · VERCEL</text>
+  <text x="56" y="156" font-family="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, sans-serif" font-size="54" font-weight="800" letter-spacing="1"><tspan fill="#F1F5F9">ODIN </tspan><tspan fill="#2DD4BF">SAGA</tspan></text>
+  <text x="56" y="200" font-family="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, sans-serif" font-size="25" font-weight="600" fill="#D7DEE8">萨迦 · 博客与数字花园，浏览器写作、Git 存档</text>
+  <text x="56" y="236" font-family="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, sans-serif" font-size="19" fill="#8B9BB4">Next.js · Markdown · GitHub App 在线编辑 · 点赞 / RSS / 暗色</text>
+  <text x="56" y="276" font-family="ui-monospace, SFMono-Regular, Menlo, &quot;Consolas&quot;, monospace" font-size="17" fill="#5F6F8C">github.com/kael-odin/odin-saga</text>
+  <g transform="translate(770 44)">
+    <rect width="374" height="232" rx="14" fill="#131A2B" stroke="#26334D"/>
+    <rect x="117" y="28" width="140" height="176" rx="8" fill="#F5F1E6" stroke="#D8D2C0"/>
+    <text x="132" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, &quot;Consolas&quot;, monospace" font-size="19" font-weight="700" fill="#2DD4BF">#</text>
+    <rect x="150" y="52" width="72" height="9" rx="4.5" fill="#3A4560"/>
+    <path d="M231 28 L231 66 L240 57 L249 66 L249 28 Z" fill="#2DD4BF"/>
+    <rect x="136" y="96" width="96" height="7" rx="3.5" fill="#B9B4A4" fill-opacity="0.55"/><rect x="136" y="118" width="84" height="7" rx="3.5" fill="#B9B4A4" fill-opacity="0.45"/><rect x="136" y="140" width="96" height="7" rx="3.5" fill="#B9B4A4" fill-opacity="0.4"/><rect x="136" y="162" width="60" height="7" rx="3.5" fill="#B9B4A4" fill-opacity="0.32"/>
+    <rect x="222" y="168" width="24" height="14" rx="7" fill="#2DD4BF" fill-opacity="0.9"/>
+    <text x="18" y="219" font-family="ui-monospace, SFMono-Regular, Menlo, &quot;Consolas&quot;, monospace" font-size="16" fill="#5F6F8C" letter-spacing="1">git-based writing</text>
+  </g>
+</svg>
