@@ -48,9 +48,15 @@ export async function getPemFromCache(): Promise<string | null> {
 
 export async function savePemToCache(pem: string): Promise<void> {
 	if (typeof sessionStorage === 'undefined') return
+	// 安全底线：ENCRYPT_KEY 未配置（或仍是占位）时不落盘——
+	// 前端 bundle 里的固定密钥只能混淆，挡不住 XSS 窃取
+	const key = GITHUB_CONFIG.ENCRYPT_KEY
+	if (!key) {
+		toast.warning('未配置加密密钥（NEXT_PUBLIC_GITHUB_ENCRYPT_KEY），本次不缓存私钥')
+		return
+	}
 	try {
-		// 加密 pem 后存储
-		const encryptedPem = await encrypt(pem, GITHUB_CONFIG.ENCRYPT_KEY)
+		const encryptedPem = await encrypt(pem, key)
 		sessionStorage.setItem(GITHUB_PEM_CACHE_KEY, encryptedPem)
 	} catch (error) {
 		console.error('Failed to save pem to cache:', error)

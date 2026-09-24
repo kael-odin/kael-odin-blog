@@ -12,5 +12,6 @@ export const GITHUB_CONFIG = {
 	REPO: process.env.NEXT_PUBLIC_GITHUB_REPO || 'odin-saga',
 	BRANCH: process.env.NEXT_PUBLIC_GITHUB_BRANCH || 'main',
 	APP_ID: process.env.NEXT_PUBLIC_GITHUB_APP_ID || '-',
-	ENCRYPT_KEY: process.env.NEXT_PUBLIC_GITHUB_ENCRYPT_KEY || 'wudishiduomejimo',
+	// 未配置密钥时禁用 PEM 缓存：没有真实密钥的"加密"只是混淆
+	ENCRYPT_KEY: (process.env.NEXT_PUBLIC_GITHUB_ENCRYPT_KEY || '').trim(),
 } as const

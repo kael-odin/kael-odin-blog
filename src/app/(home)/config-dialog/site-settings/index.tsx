@@ -104,7 +104,7 @@ export function SiteSettings({
 						onChange={e => setFormData({ ...formData, isCachePem: e.target.checked })}
 						className='accent-brand h-4 w-4 rounded'
 					/>
-					<span className='text-sm font-medium'>缓存PEM(已加密，但存在风险)</span>
+					<span className='text-sm font-medium'>缓存PEM（需先配置 NEXT_PUBLIC_GITHUB_ENCRYPT_KEY；仅混淆，仍有被 XSS 窃取的风险）</span>
 				</label>
 				<label className='flex items-center gap-2'>
 					<input
